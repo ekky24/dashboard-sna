@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Login</title>
+    <link href='http://fonts.googleapis.com/css?family=Lato:900' rel='stylesheet' type='text/css'>
+    <link href="{% static "templates/dashboard/css/bootstrap.min.css" %}" rel='stylesheet' type='text/css' />
+    <link href="{% static "templates/dashboard/css/font-awesome.min.css" %}" rel='stylesheet' type='text/css' />
+    <link href="{% static "templates/dashboard/css/animate.min.css" %}" rel='stylesheet' type='text/css' />
+    <link href="{% static "templates/dashboard/css/custom.css" %}" rel='stylesheet' type='text/css' />
+    <link href="{% static "templates/dashboard/css/qilara.css" %}" rel='stylesheet' type='text/css' />
+    <link href="https://fonts.googleapis.com/css?family=Maven+Pro:900" rel="stylesheet">
+</head>
+
+<body class="login">
+    <div class="row" style="padding : 20px 15% 0 15%">
+        <div class="col-md-3">
+            <img src='{% static "templates/dashboard/images/logo_lipi.png" %}' class="company_logo">
+        </div>
+        <div class="col-md-9">
+            <h1 style="font-size: 32px;text-align:left;font-weight : bold; font-family: 'Maven Pro', sans-serif;">
+                Dashboard Social Network Analytics
+            </h1>
+            <h2 style="font-size: 18px;text-align:left;font-weight : bold; font-family: 'Maven Pro', sans-serif;">
+            	Pusat Penelitian Informatika - LIPI
+        	</h2>
+        </div>
+    </div>
+
+    <div>
+      <a class="hiddenanchor" id="signup"></a>
+      <a class="hiddenanchor" id="signin"></a>
+
+      <div class="login_wrapper">
+        <div class="animate form login_form">
+            {% if form.errors %}
+                <div class="alert alert-danger" style="margin-bottom : 50px">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+            
+	        {% if messages %}
+	        	{% for message in messages %}
+	                <div class="row">
+	                    <div class="alert alert-success" role="alert">
+	                        <p>{{ message }}</p>
+	                    </div>
+	                </div>
+	            {% endfor %}
+	        {% endif %}
+
+          <section class="login_content">
+            <form action="" class="form-horizontal" method="POST">
+            {% csrf_token %}
+            <h1>Login Form</h1>
+            <div>
+                <input type="text" class="form-control" placeholder="Username" required="" name="username" value="" />
+            </div>
+            <div>
+                <input type="password" class="form-control" placeholder="Password" required="" name="password" />
+            </div>
+              <div>
+                <button type="submit" class="btn btn-success">
+                    Sign In
+                </button>
+              </div>
+
+              <div class="clearfix"></div>
+
+              <div class="separator">               
+
+                <div class="clearfix"></div>
+                <br />
+
+                <div>                  
+                  <p>©2017 Research Center for Informatics</p>
+                </div>
+              </div>
+            </form>
+          </section>
+        </div>        
+      </div>
+    </div>
+    <script type="text/javascript" src="{% static "templates/dashboard/js/jquery.min.js" %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('input[name=username]').focus();
+        });
+    </script>
+  </body>
+</html>

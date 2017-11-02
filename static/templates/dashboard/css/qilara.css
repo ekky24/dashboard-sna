@@ -1,0 +1,24 @@
+.right_col { height : 95vh; }
+.main_menu_side {  padding: 70px 0 0 0; }
+.center_bold { text-align: center; font-weight: bold }
+textarea.description { height : 100px; }
+.paging_full_numbers a.current {
+    background-color: #ffffff !important;
+}
+.overflow_hidden, .sidebar-widget, .site_title, .tile, .weather-days .col-sm-2, .x_title h2, table.tile_info td p {
+    overflow: visible;
+}
+.white { color : #ffffff !important;}
+.right { text-align: right;}
+.center { text-align: center;}
+.monthselect, .yearselect {background: #34495E }
+.table-responsive { overflow-x: initial; }
+.margin-top-60 { margin-top: 60px }
+.nav-md .container.body .right_col {
+    padding: 10px 80px 0 20px;
+}
+
+.row {
+    margin-right: -50px;
+}
+

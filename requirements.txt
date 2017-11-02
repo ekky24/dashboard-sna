@@ -1,0 +1,6 @@
+Django==1.11.4
+django-debug-toolbar==1.8
+django-environ==0.4.4
+django-widget-tweaks==1.4.1
+djongo==1.2.6
+Pillow==4.3.0
