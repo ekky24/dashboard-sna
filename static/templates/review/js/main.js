@@ -203,7 +203,7 @@ $(document).ready (function (){
 			
 			$.ajax({
 				type: 'POST',
-				url: '/postagger/submit/a',
+				url: '/postagger/submit/',
 				data: JSON.stringify(dataToSend),
 				beforeSend: function(xhr, settings) {
 					xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'))
