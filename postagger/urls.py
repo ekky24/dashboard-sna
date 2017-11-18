@@ -1,6 +1,8 @@
 from django.conf.urls import url
-from . import views
+
+from . import api 
 
 urlpatterns = [
-	#url(r'^$', front_views.index),
+	url(r'^fetch/(?P<userid>[a-zA-Z0-9]+)/$', api.on_fetch),
+	url(r'^submit/$', api.on_submit)
 ]

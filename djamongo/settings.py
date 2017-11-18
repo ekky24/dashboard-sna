@@ -34,7 +34,8 @@ INSTALLED_APPS = [
 	'django.contrib.staticfiles',
 	'users',
 	'widget_tweaks',
-	'postagger'
+	'postagger',
+	'review'
 ]
 
 MIDDLEWARE = [
@@ -127,12 +128,12 @@ STATIC_URL = '/static/'
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [STATIC_DIR, ]
 
-
 LOGIN_REDIRECT_URL = '/dashboard'
 LOGIN_URL = '/dashboard/login/'
 LOGOUT_REDIRECT_URL = '/dashboard/login/'
 
-
+# guest session expired
+SESSION_EXPIRED = 86400
 
 if DEBUG:
    INTERNAL_IPS = ('127.0.0.1', 'localhost',)

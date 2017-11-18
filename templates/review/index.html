@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+{% load static %}
+<link rel="stylesheet" media="screen" href = "{% static 'templates/review/css/bootstrap.min.css' %}">
+<link rel="stylesheet" media="screen" href = "{% static 'templates/review/css/custom.css' %}">
+<meta name="viewport" content = "width=device-width, initial-scale=1.0">
+<head>
+
+<title>Home</title>
+
+</head>
+<body>
+{% include "review/navbar.html" %}
+
+<div class="sentence">
+	<div class="row" style="margin-top:30px" id="action-button-container" hidden> 	
+	<div class="col-md-2 col-xs-6 col-sm-4" id="submit-div"> 		
+		<button type="button" class="btn btn-success btn-md text-center submit-btn btn-block"><b>Submit</b></button>
+	</div>
+	<div class="col-md-2 col-xs-6 col-sm-4" id="reset-div">
+		<button type="button" class="btn btn-danger btn-md text-center reset-btn btn-block"><b>Reset</b></button>
+	</div>
+	</div>
+</div>
+{% include "review/dialog.html" %}
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+	<div class="modal-dialog" role="document">
+	<div class="modal-content">
+		
+		<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title" id="modalLabel">Tagset</h4>
+		</div>
+		<div class="modal-body tagset">
+		<div class="row">
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xs-offset-0">
+				<ul class="list-group">
+				  <li class="list-group-item tagset-item" id="CC"><span class="label label-default">CC</span>  coordinating conjunction</li>
+				  <li class="list-group-item tagset-item" id="CD"><span class="label label-default">CD</span>  cardinal number</li>
+				  <li class="list-group-item tagset-item" id="OD"><span class="label label-default">OD</span>  ordinal number</li>
+				  <li class="list-group-item tagset-item" id="DT"><span class="label label-default">DT</span> determiner / article</li>
+				  <li class="list-group-item tagset-item" id="FW"><span class="label label-default">FW</span> foreign word </li>
+				  <li class="list-group-item tagset-item" id="IN"><span class="label label-default">IN</span> preposition </li>
+				  <li class="list-group-item tagset-item" id="JJ"><span class="label label-default">JJ</span> adjective </li>
+				  <li class="list-group-item tagset-item" id="MD"><span class="label label-default">MD</span> modal and auxiliary verb </li>
+				  <li class="list-group-item tagset-item" id="NEG"><span class="label label-default">NEG</span> negation </li>
+				  <li class="list-group-item tagset-item" id="NN"><span class="label label-default">NN</span> noun </li>
+				  <li class="list-group-item tagset-item" id="WH"><span class="label label-default">WH</span> question </li>
+				  <li class="list-group-item tagset-item" id="X"><span class="label label-default">X</span> unknown </li>
+				  <li class="list-group-item tagset-item" id="Z"><span class="label label-default">Z</span> punctuation </li>
+				  <li class="list-group-item tagset-item" id="AT"><span class="label label-default">AT</span> mention </li>
+				</ul>
+			</div>
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xs-offset-0">
+				<ul class="list-group">
+				  <li class="list-group-item tagset-item" id="NNP"><span class="label label-default">NNP</span> proper noun </li>
+				  <li class="list-group-item tagset-item" id="NND"><span class="label label-default">NND</span> classifier, partitive and measurement noun </li>
+				  <li class="list-group-item tagset-item" id="PR"><span class="label label-default">PR</span> demonstrative pronoun </li>
+				  <li class="list-group-item tagset-item" id="PRP"><span class="label label-default">PRP</span> personal pronoun </li>
+				  <li class="list-group-item tagset-item" id="RB"><span class="label label-default">RB</span> adverb </li>
+				  <li class="list-group-item tagset-item" id="RP"><span class="label label-default">RP</span> particle </li>
+				  <li class="list-group-item tagset-item" id="SC"><span class="label label-default">SC</span> subordinating conjunction </li>
+				  <li class="list-group-item tagset-item" id="SYM"><span class="label label-default">SYM</span> symbol </li>
+				  <li class="list-group-item tagset-item" id="UH"><span class="label label-default">UH</span> interjection </li>
+				  <li class="list-group-item tagset-item" id="VB"><span class="label label-default">VB</span> verb </li>
+				  <li class="list-group-item tagset-item" id="DISC"><span class="label label-default">DISC</span> discourse maker </li>
+				  <li class="list-group-item tagset-item" id="HASH"><span class="label label-default">HASH</span> hastag </li>
+				  <li class="list-group-item tagset-item" id="URL"><span class="label label-default">URL</span> uniform resource locator </li>
+				  <li class="list-group-item tagset-item" id="EMO"><span class="label label-default">EMO</span> emoticon </li>
+				</ul>
+			</div>
+		</div>
+		<div class="alert alert-info tagset-detail hidden">Basic Well</div>
+			
+		<div class="modal-footer">
+			<div class="row word-control">
+				<div class="col-xs-4 col-md-4" style="padding-right: 0px;">
+					<button type="button" class="btn btn-default btn-xs text-center" id="merge-left-btn">
+						<span class="glyphicon glyphicon-chevron-left"></span><br>Merge to left
+					</button>
+				</div>
+				<div class="col-xs-4 col-md-4">
+					<button type="button" class="btn btn-default btn-xs text-center" id="split-btn">
+						<span class="glyphicon glyphicon-resize-horizontal"></span><br>Split
+					</button>
+				</div>
+				<div class="col-xs-4 col-md-4" style="padding-left: 0px;">
+					<button type="button" class="btn btn-default btn-xs text-center" id="merge-right-btn">
+						<span class="glyphicon glyphicon-chevron-right"></span><br>Merge to right
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	</div>
+	
+<script src="{% static 'templates/review/js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'templates/review/js/jqueryui/jquery-ui.js' %}"></script>
+<script src="{% static 'templates/review/js/bootstrap.min.js' %}" ></script>
+<script src="{% static 'templates/review/js/csrf-cookie.js' %}" ></script>
+<script src="{% static 'templates/review/js/main.js' %}"></script>
+
+</body>

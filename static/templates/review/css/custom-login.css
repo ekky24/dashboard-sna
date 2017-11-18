@@ -1,0 +1,90 @@
+@font-face {
+    font-family: "Lato";
+    src: url(/static/templates/review/fonts/Lato-Regular.ttf) format("truetype");
+}
+@font-face {
+    font-family: "Maven Pro";
+    src: url(/static/templates/review/fonts/MavenPro-Regular.ttf) format("truetype");
+}
+@font-face {
+    font-family: "Maven Pro";
+    src: url(/static/templates/review/fonts/MavenPro-Bold.ttf) format("truetype");
+	font-weight: bold;
+}
+#header {
+	padding:20px 15% 0 15%;
+}
+
+#header-top-title {
+	font-size: 30px;
+	text-align:left;
+	font-weight: bold;
+	font-family: 'Maven Pro', sans-serif;
+	color: white;
+	text-align: center;
+}
+
+#header-bottom-title {
+	font-size: 16px;
+	text-align:left;
+	font-weight: bold;
+	font-family: 'Maven Pro', sans-serif;
+	color: white;
+	text-align: center;
+}
+
+* {
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	        box-sizing: border-box;
+	outline: none;
+}
+
+#company-logo {
+	height, width: 10%;
+}
+
+body {
+	background: url(../images/bg.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+	overflow-x:hidden; /* remove excess horizontal bar */
+}
+
+.login-form {
+    font: 16px/2em Lato, serif;
+	margin: 20px auto;
+	max-width: 400px;
+}
+
+form[role=login] {
+	color: #5d5d5d;
+	background: #f2f2f2;
+	padding: 26px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+	form[role=login] img {
+		display: block;
+		margin: 0 auto;
+		margin-bottom: 35px;
+	}
+	form[role=login] input,
+	form[role=login] button {
+		font-size: 18px;
+		margin: 16px 0;
+	}
+	form[role=login] > div {
+		text-align: center;
+	}
+	
+.form-links {
+	text-align: center;
+	margin-bottom: 10px;
+}
+	.form-links a {
+		color: #fff;
+	}

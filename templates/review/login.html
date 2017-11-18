@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% load static %}
+
+<link rel="stylesheet" media="screen" href = "{% static 'templates/review/css/bootstrap.min.css' %}">
+<link rel="stylesheet" media="screen" href = "{% static 'templates/review/css/custom-login.css' %}">
+<meta name="viewport" content = "width=device-width, initial-scale=1.0">
+<head>
+
+<title>Authentication</title>
+
+</head>
+<body>
+
+<div class="row" id="header">
+	<div class="col-md-12">
+		<h1 id="header-top-title">
+			Dashboard Social Network Analytics
+		</h1>
+		<h2 id="header-bottom-title">
+			Pusat Penelitian Informatika - LIPI
+		</h2>
+	</div>
+</div>
+	
+<section class="container">
+	<section class="login-form">
+		<form method="post" action="{% url 'review-login' %}" role="login">
+		{% csrf_token %}
+			<img src='{% static "templates/review/images/logo_lipi.png" %}' style="width: 25%"/>
+			{% if message %}
+			<div class="alert alert-danger alert-dismissable fade in" style="font-size: 13px">
+			{{ message }}
+			</div>
+			{% endif %}
+			
+			<input type="text" name="username" placeholder="Username" required class="form-control input-md" />
+			<input type="password" name="password" placeholder="Password" required class="form-control input-md" />
+			
+			<button type="submit" name="go" class="btn btn-sm btn-primary btn-block">Login</button>
+			<input type="button" name="go" class="btn btn-sm btn-success btn-block" onclick="location.href = '/review/';" value="Enter as guest">
+			<div>
+				<a href="#">Create account</a> or <a href="#">reset password</a>
+			</div>
+			
+		</form>
+	</section>
+</section>
+  
+<script src="{% static 'templates/review/js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'templates/review/js/bootstrap.min.js' %}" ></script>
+</body>

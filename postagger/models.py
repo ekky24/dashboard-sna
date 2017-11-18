@@ -1,28 +1,30 @@
 from djongo import models
-from users.models import User
 
-# word and tag pair
-class WordTagged(models.Model):
-	word = models.CharField(max_length=100)
-	tag = models.CharField(max_length=6)
+class WordTag(models.Model):
+	word = models.CharField(max_length=50)
+	tags = models.CharField(max_length=6)
 	class Meta:
 		abstract = True
-
-# user and word tagged
-class POSTagger(models.Model):
-	user_id = models.ForeignKey(User)
-	tagged = models.ArrayModelField(model_container=WordTagged)
-	class Meta:
-		abstract = True
-
-# tagged collection		
-class Tagged(models.Model):
-	source = models.CharField(max_length=30)
-	source_id = models.CharField(max_length=100)
-	model_name = models.CharField(max_length=10)
-	model_version = models.IntegerField()
 	
+class UserTag(models.Model):
+	user_id = models.CharField(max_length=20)
+	created_at = models.DateTimeField()
+	tag = models.ArrayModelField(model_container=WordTag)	
+	class Meta:
+		abstract = True
+
+# postagger_evaluation collection
+class Evaluation(models.Model):
+	source = models.CharField(max_length=10)
+	source_id = models.CharField(max_length=10)
+	model_name = models.CharField(max_length=20)
+	model_version = models.CharField(max_length=6)
 	sentence = models.CharField(max_length=200)
-	sentence_idx = models.IntegerField()
-	auto_tag = models.ArrayModelField(model_container=WordTagged)
-	verify_tag = models.ArrayModelField(model_container=POSTagger)
+	sentence_idx = models.IntegerField(default=0)
+	status = models.CharField(max_length=10)
+	auto_tag = models.ArrayModelField(model_container=WordTag)
+	user_tag = models.ArrayModelField(model_container=UserTag)
+	verified_tag = models.ArrayModelField(model_container=WordTag)
+	
+	objects = models.DjongoManager()
+	
