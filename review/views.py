@@ -17,7 +17,7 @@ def login_user(request):
 			return redirect("review-index")
 		else:
 			message = "Please check your username and password again"
-			return render(request, "login.html", context={'message': message})
+			return render(request, "review/login.html", context={'message': message})
 	
 	return render(request, "review/login.html")
 	
