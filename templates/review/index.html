@@ -24,7 +24,7 @@
 {% include "review/dialog.html" %}
 
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-sm" role="document">
 	<div class="modal-content">
 		
 		<div class="modal-header">
@@ -32,46 +32,130 @@
 		<h4 class="modal-title" id="modalLabel">Tagset</h4>
 		</div>
 		<div class="modal-body tagset">
+		
 		<div class="row">
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xs-offset-0">
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-xs-offset-0">
 				<ul class="list-group">
-				  <li class="list-group-item tagset-item" id="CC"><span class="label label-default">CC</span>  coordinating conjunction</li>
-				  <li class="list-group-item tagset-item" id="CD"><span class="label label-default">CD</span>  cardinal number</li>
-				  <li class="list-group-item tagset-item" id="OD"><span class="label label-default">OD</span>  ordinal number</li>
-				  <li class="list-group-item tagset-item" id="DT"><span class="label label-default">DT</span> determiner / article</li>
-				  <li class="list-group-item tagset-item" id="FW"><span class="label label-default">FW</span> foreign word </li>
-				  <li class="list-group-item tagset-item" id="IN"><span class="label label-default">IN</span> preposition </li>
-				  <li class="list-group-item tagset-item" id="JJ"><span class="label label-default">JJ</span> adjective </li>
-				  <li class="list-group-item tagset-item" id="MD"><span class="label label-default">MD</span> modal and auxiliary verb </li>
-				  <li class="list-group-item tagset-item" id="NEG"><span class="label label-default">NEG</span> negation </li>
-				  <li class="list-group-item tagset-item" id="NN"><span class="label label-default">NN</span> noun </li>
-				  <li class="list-group-item tagset-item" id="WH"><span class="label label-default">WH</span> question </li>
-				  <li class="list-group-item tagset-item" id="X"><span class="label label-default">X</span> unknown </li>
-				  <li class="list-group-item tagset-item" id="Z"><span class="label label-default">Z</span> punctuation </li>
-				  <li class="list-group-item tagset-item" id="AT"><span class="label label-default">AT</span> mention </li>
+					<li class="list-group-item tagset-item" id="CC">
+						<span class="label label-default" data-toggle="tooltip" data-placement="right" title="Coordinating Conjunction">CC</span> 
+						<span class="tagset-explain">coordinating conjunction</span>
+					</li>
+					<li class="list-group-item tagset-item" id="CD">
+						<span class="label label-default" data-toggle="tooltip" data-placement="right" title="Cardinal Number">CD</span> 
+						<span class="tagset-explain">cardinal number</span>
+					</li>
+					<li class="list-group-item tagset-item" id="OD">
+						<span class="label label-default" data-toggle="tooltip" data-placement="right" title="Ordinal Number">OD</span> 
+						<span class="tagset-explain">ordinal number</span>
+					</li>
+					<li class="list-group-item tagset-item" id="DT">
+						<span class="label label-default" data-toggle="tooltip" data-placement="right" title="Determiner / Article">DT</span> 
+						<span class="tagset-explain">determiner / article</span>
+					</li>
+					<li class="list-group-item tagset-item" id="FW">
+						<span class="label label-default" data-toggle="tooltip" data-placement="right" title="Foreign World">FW</span> 
+						<span class="tagset-explain">foreign word</span>
+					</li>
+					<li class="list-group-item tagset-item" id="IN">
+						<span class="label label-default" data-toggle="tooltip" data-placement="right" title="Preposition">IN</span> 
+						<span class="tagset-explain">preposition</span>
+					</li>
+					<li class="list-group-item tagset-item" id="JJ">
+						<span class="label label-default" data-toggle="tooltip" data-placement="right" title="Adjective">JJ</span> 
+						<span class="tagset-explain">adjective</span>
+					</li>
+					<li class="list-group-item tagset-item" id="MD">
+						<span class="label label-default" data-toggle="tooltip" data-placement="right" title="Modal and Auxiliary Verb">MD</span> 
+						<span class="tagset-explain">modal and auxiliary verb</span>
+					</li>
+					<li class="list-group-item tagset-item" id="NEG">
+						<span class="label label-default" data-toggle="tooltip" data-placement="right" title="Negation">NEG</span> 
+						<span class="tagset-explain">negation</span>
+					</li>
+					<li class="list-group-item tagset-item" id="NN">
+						<span class="label label-default" data-toggle="tooltip" data-placement="right" title="Noun">NN</span> 
+						<span class="tagset-explain">noun</span>
+					</li>
+					<li class="list-group-item tagset-item" id="WH">
+						<span class="label label-default" data-toggle="tooltip" data-placement="right" title="Question">WH</span> 
+						<span class="tagset-explain">question</span>
+					</li>
+					<li class="list-group-item tagset-item" id="X">
+						<span class="label label-default" data-toggle="tooltip" data-placement="right" title="Unknown">X</span>
+						<span class="tagset-explain">unknown</span>
+					</li>
+					<li class="list-group-item tagset-item" id="Z">
+						<span class="label label-default" data-toggle="tooltip" data-placement="right" title="Punctuation">Z</span>
+						<span class="tagset-explain">punctuation</span>
+					</li>
+					<li class="list-group-item tagset-item" id="AT">
+						<span class="label label-default" data-toggle="tooltip" data-placement="right" title="Mention">AT</span> 
+						<span class="tagset-explain">mention</span>
+					</li>
 				</ul>
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xs-offset-0">
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-xs-offset-0">
 				<ul class="list-group">
-				  <li class="list-group-item tagset-item" id="NNP"><span class="label label-default">NNP</span> proper noun </li>
-				  <li class="list-group-item tagset-item" id="NND"><span class="label label-default">NND</span> classifier, partitive and measurement noun </li>
-				  <li class="list-group-item tagset-item" id="PR"><span class="label label-default">PR</span> demonstrative pronoun </li>
-				  <li class="list-group-item tagset-item" id="PRP"><span class="label label-default">PRP</span> personal pronoun </li>
-				  <li class="list-group-item tagset-item" id="RB"><span class="label label-default">RB</span> adverb </li>
-				  <li class="list-group-item tagset-item" id="RP"><span class="label label-default">RP</span> particle </li>
-				  <li class="list-group-item tagset-item" id="SC"><span class="label label-default">SC</span> subordinating conjunction </li>
-				  <li class="list-group-item tagset-item" id="SYM"><span class="label label-default">SYM</span> symbol </li>
-				  <li class="list-group-item tagset-item" id="UH"><span class="label label-default">UH</span> interjection </li>
-				  <li class="list-group-item tagset-item" id="VB"><span class="label label-default">VB</span> verb </li>
-				  <li class="list-group-item tagset-item" id="DISC"><span class="label label-default">DISC</span> discourse maker </li>
-				  <li class="list-group-item tagset-item" id="HASH"><span class="label label-default">HASH</span> hastag </li>
-				  <li class="list-group-item tagset-item" id="URL"><span class="label label-default">URL</span> uniform resource locator </li>
-				  <li class="list-group-item tagset-item" id="EMO"><span class="label label-default">EMO</span> emoticon </li>
+					<li class="list-group-item tagset-item" id="NNP">
+						<span class="label label-default" data-toggle="tooltip" data-placement="right" title="Proper Noun">NNP</span> 
+						<span class="tagset-explain">proper noun</span>
+					</li>
+					<li class="list-group-item tagset-item" id="NND">
+						<span class="label label-default" data-toggle="tooltip" data-placement="right" title="Classifier, Partitive and Measurement Noun">NND</span> 
+						<span class="tagset-explain">classifier, partitive,  measurement noun
+					</li>
+					<li class="list-group-item tagset-item" id="PR">
+						<span class="label label-default" data-toggle="tooltip" data-placement="right" title="Demonstrative Pronoun">PR</span> 
+						<span class="tagset-explain">demonstrative pronoun</span>
+					</li>
+					<li class="list-group-item tagset-item" id="PRP">
+						<span class="label label-default">PRP</span> 
+						<span class="tagset-explain">personal pronoun</span>
+					</li>
+					<li class="list-group-item tagset-item" id="RB">
+						<span class="label label-default">RB</span> 
+						<span class="tagset-explain">adverb</span>
+					</li>
+					<li class="list-group-item tagset-item" id="RP">
+						<span class="label label-default">RP</span> 
+						<span class="tagset-explain">particle</span>
+					</li>
+					<li class="list-group-item tagset-item" id="SC">
+						<span class="label label-default">SC</span> 
+						<span class="tagset-explain">subordinating conjunction</span>
+					</li>
+					<li class="list-group-item tagset-item" id="SYM">
+						<span class="label label-default">SYM</span> 
+						<span class="tagset-explain">symbol</span>
+					</li>
+					<li class="list-group-item tagset-item" id="UH">
+						<span class="label label-default">UH</span> 
+						<span class="tagset-explain">interjection</span>
+					</li>
+					<li class="list-group-item tagset-item" id="VB">
+						<span class="label label-default">VB</span> 
+						<span class="tagset-explain">verb</span>
+					</li>
+					<li class="list-group-item tagset-item" id="DISC">
+						<span class="label label-default">DISC</span> 
+						<span class="tagset-explain">discourse maker</span>
+					</li>
+					<li class="list-group-item tagset-item" id="HASH">
+						<span class="label label-default">HASH</span> 
+						<span class="tagset-explain">hastag</span>
+					</li>
+					<li class="list-group-item tagset-item" id="URL">
+						<span class="label label-default">URL</span> 
+						<span class="tagset-explain">uniform resource locator</span>
+					</li>
+					<li class="list-group-item tagset-item" id="EMO">
+						<span class="label label-default">EMO</span> 
+						<span class="tagset-explain">emoticon</span>
+					</li>
 				</ul>
 			</div>
 		</div>
-		<div class="alert alert-info tagset-detail hidden">Basic Well</div>
-			
+		
 		<div class="modal-footer">
 			<div class="row word-control">
 				<div class="col-xs-4 col-md-4" style="padding-right: 0px;">
@@ -91,6 +175,7 @@
 				</div>
 			</div>
 		</div>
+		
 	</div>
 	</div>
 	</div>

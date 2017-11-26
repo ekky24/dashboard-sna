@@ -107,23 +107,23 @@ body {
 }
 
 .tagset {
-	font-size: small;
+    font-size: 13px;
 }
-
 .tagset-detail {
-	margin-left: 6%;
-	margin-right: 5%;
+    margin-left: 6%;
+    margin-right: 5%;
+}
+.tagset-item {
+    border: 10px;
+    padding-left: 2%;
+    padding-right: 0px;
+    padding-bottom: 4px;
+    padding-top: 4px;
+    margin: 0px;
 }
 
-.tagset-item {
-	font-family: "Helvetica Narrow","Arial Narrow","Tahoma","Arial","Helvetica","sans-serif";
-	border: 10px;
-	padding-left:2%;
-	padding-right:0px;
-	padding-bottom: 4px;
-	padding-top: 4px;
-	margin: 0px;
-	font-size: 12px;
+.a{
+	width: 30%;
 }
 
 .word-control {
