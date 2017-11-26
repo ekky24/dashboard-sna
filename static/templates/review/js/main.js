@@ -78,10 +78,7 @@ $(document).ready (function (){
 				// change highlighted word
 				$('.active').removeClass('active')
 				$(this).addClass('active')
-				
-				// change tag detail
-				setTagDetail($(this).text())
-				
+								
 				// change color
 				let sentencePartWords = $clickedWordContainer.children().slice(0, -1)
 				let bgColor = tagsetColor[$(this).attr('id')]
@@ -289,30 +286,24 @@ $(document).ready (function (){
 			let tagIndex = $clickedWordContainer.children().length - 1
 			let clickedWordTagId = '#' + $($clickedWordContainer.children()[tagIndex]).text()
 			$(clickedWordTagId).addClass('active')
-			
-			// set tag detail
-			setTagDetail($('.active').text())
-			
+						
 			// set split, merge to left, merge to right btn to active
 			$('#split-btn').prop('disabled', false)
 			$('#merge-left-btn').prop('disabled', false)
 			$('#merge-right-btn').prop('disabled', false)
 
-			let sentences = $('.all-sentences').children()
-			for (let i=0; i < sentences.length; i++){
-				// get sibling word count
-				let $wholeSentence = $(sentences[i])
-				let lastSentencePartIndex = $wholeSentence.children().length - 2
-				let sentencePartIndex = $clickedWordContainer.parent().index()
-				
-				// set disabled button
-				if (sentencePartIndex === lastSentencePartIndex)
-					$('#merge-right-btn').prop('disabled', true);
-				if (sentencePartIndex === 0) 				
-					$('#merge-left-btn').prop('disabled', true);
-				if (!splittable($clickedWordContainer))
-					$('#split-btn').prop('disabled', true);
-			}
+			// get sibling word count
+			let $sentence = $('.sentence')
+			let lastSentencePartIndex = $sentence.children().length - 2
+			let sentencePartIndex = $clickedWordContainer.parent().index()
+			
+			// set disabled button
+			if (sentencePartIndex === lastSentencePartIndex)
+				$('#merge-right-btn').prop('disabled', true);
+			if (sentencePartIndex === 0) 				
+				$('#merge-left-btn').prop('disabled', true);
+			if (!splittable($clickedWordContainer))
+				$('#split-btn').prop('disabled', true);
 			
 			$('#modal').modal('show')
 		}
@@ -351,11 +342,6 @@ $(document).ready (function (){
 		words.push({"word": $(sentencePartWords[last]).text(), "tag": "E-" + sentencePartTag})
 		
 		return words
-	}
-	
-	function setTagDetail (tag) {
-		let detail =  tag.bold() + ' <br> ' + tagsetDetail[tag]
-		$('.tagset-detail').html(detail)
 	}
 		
 	function splittable ($container) {
@@ -479,6 +465,11 @@ $(document).ready (function (){
 		}
 	}
 	
+	function hideTagsetExplanationIfDesktop () {
+		if ($(window).width() > 960)
+			$('.tagset-explain').hide()
+	}
+	
 	function init () {
 		let userid = $('#user_id').text()
 
@@ -487,6 +478,8 @@ $(document).ready (function (){
 			changeBgWordsColor()
 			saveSentencesOriginalState()
 			attachEventListener()
+			hideTagsetExplanationIfDesktop()
+			$('[data-toggle="tooltip"]').tooltip(); 
 		})
 	}
 	
