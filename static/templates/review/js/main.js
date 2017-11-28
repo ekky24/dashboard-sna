@@ -216,9 +216,11 @@ $(document).ready (function (){
 					
 					let userid = $('#user_id').text()
 					$.get('/postagger/fetch/' + userid, function (sentence, status) {
-						$('.sentence-part').remove()
-						loadUnevaluatedSentence(sentence)
-						changeBgWordsColor()
+						if (status === 'success'){
+							$('.sentence-part').remove()
+							loadUnevaluatedSentence(sentence)
+							changeBgWordsColor()
+						}
 					})
 					
 				},
@@ -474,12 +476,14 @@ $(document).ready (function (){
 		let userid = $('#user_id').text()
 
 		$.get('/postagger/fetch/' + userid, function (sentence, status) {
-			loadUnevaluatedSentence(sentence)
-			changeBgWordsColor()
-			saveSentencesOriginalState()
-			attachEventListener()
-			hideTagsetExplanationIfDesktop()
-			$('[data-toggle="tooltip"]').tooltip(); 
+			if(status === 'success'){
+				loadUnevaluatedSentence(sentence)
+				changeBgWordsColor()
+				saveSentencesOriginalState()
+				attachEventListener()
+				hideTagsetExplanationIfDesktop()
+				$('[data-toggle="tooltip"]').tooltip()
+			}
 		})
 	}
 	

@@ -23,7 +23,7 @@ def login_user(request):
 	
 def index(request):
 
-	if (not	request.user.is_authenticated()):
+	if (not	request.user.is_authenticated() and 'user_id' not in request.session):
 		user_id = get_random_string(length=14)
 		request.session.set_expiry(settings.SESSION_EXPIRED)
 		request.session["user_id"] = "guest"+user_id
