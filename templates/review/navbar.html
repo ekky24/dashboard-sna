@@ -11,7 +11,7 @@
 	<div class="collapse navbar-collapse" id="navbar-eval">
 	<ul class="nav navbar-nav navbar-right">
 		<li><a href="#"><span class="glyphicon glyphicon-user"></span> <b id="user_id">{{ request.session.user_id }}</b> </a></li>
-	{% if user.is_authenticated %}
+	{% if request.session.user_number_id %}
 		<li><a href="/review/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 	{% else %}
 		<li><a href="/review/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>

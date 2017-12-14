@@ -20,10 +20,21 @@ def on_fetch (request, userid):
 		
 		# search sentence that is not evaluated by this user yet
 		search_criteria = {
-			'verify_tag.user_id': { 
-				'$ne': this_user_id
-			}
+			'$or': [{
+				'verify_tag': {'$exists': False}
+			}, {
+				'$and': [
+					{ 'verify_tag': {'$exists': True} }, 
+					{ 'verify_tag.user_id': { 
+						'$ne': this_user_id
+					}},
+					{'verify_tag.length': {
+						'$lt': 10
+					}}
+				]
+			}]
 		}
+		
 		unevaluated_sentences = Evaluation.objects.mongo_find(search_criteria)
 		unevaluated_total = unevaluated_sentences.count()
 		
@@ -44,7 +55,7 @@ def on_submit (request):
 		evaluation_result = loads(request.body.decode('utf-8'))
 		this_user_id = evaluation_result['user']
 		if (request.user.is_authenticated()):
-			this_user_id = User.objects.get(username=this_user_id).id
+			this_user_id = request.session['user_number_id']
 		
 		Evaluation.objects.mongo_update({
 			'_id': ObjectId(evaluation_result['oid'])
@@ -61,3 +72,54 @@ def on_submit (request):
 		
 	return HttpResponse(status=response_code)	
 	
+def on_overview_requested (request):
+	sentences_evaluated = Evaluation.objects.mongo_find({'verify_tag': {'$exists': True}})
+	response = {
+		"evaluated_total": sentences_evaluated.count(),
+		"accuracy_pos": 0,
+		"accuracy_iobes": 0,
+		"accuracy_total": 0
+	}
+	
+	right_pos, right_iobes, right_iobes_pos, total_word_reviewed = 0, 0, 0, 0
+	
+	for document in sentences_evaluated:
+		auto_tagged = document['auto_tag']
+		reviews = document['verify_tag']
+		total_word_reviewed += len(auto_tagged) * len(reviews)
+		
+		for review in reviews:
+			tag_review = review['tag']
+			
+			# calculate how many is auto tag is equal to user proposed tag
+			right_iobes_pos += sum([1 for a in range(0, len(tag_review)) if tag_review[a]['tags'] == auto_tagged[a]['tags'] ])
+			right_iobes += sum([1 for a in range(0, len(tag_review)) if tag_review[a]['tags'][:1] == auto_tagged[a]['tags'][:1] ])
+			right_pos += sum([1 for a in range(0, len(tag_review)) if tag_review[a]['tags'][2:] == auto_tagged[a]['tags'][2:] ])
+			
+	# calculate accuracy
+	response['accuracy_pos'] = right_pos / max(1, total_word_reviewed)
+	response['accuracy_iobes'] = right_iobes / max(1, total_word_reviewed)
+	response['accuracy_total'] = right_iobes_pos / max(1, total_word_reviewed)
+	
+	return JsonResponse(response)
+	
+def on_search_requested (request, searchkey):
+	response = {"matched": list()}
+	sentences_searched = Evaluation.objects.mongo_find({'sentence': {'$regex': '.*' + searchkey + '.*'}})
+	
+	for sentence in sentences_searched:
+		sentence['_id'] = string(sentence['_id'])
+		response['matched'].append(sentence)
+		auto_tagged = sentences_searched[s]['auto_tag']
+		
+		if 'verify_tag' not in sentence:
+			continue
+			
+		reviews = len(sentences_searched[s]['verify_tag'])
+		
+		# calculate accuracy for each word
+		for t in range(0, len(auto_tagged)):
+			right_tag = sum([1 for a in range(0, len(reviews)) if auto_tagged[t]['tags'] == reviews[a]['tag'][t]['tags']])
+			auto_tagged[t]['accuracy'] = right_tag / len(reviews)
+		
+	return JsonResponse(response)

@@ -11,19 +11,29 @@ def login_user(request):
 		
 		user = authenticate(username=uname, password=passw)
 		if (user is not None):
+			
 			request.session.set_expiry(settings.SESSION_EXPIRED)
 			request.session['user_id'] = user.username
-			auth_login(request, user)
+			request.session['user_number_id'] = user.id
+
 			return redirect("review-index")
-		else:
-			message = "Please check your username and password again"
-			return render(request, "review/login.html", context={'message': message})
+		
+		message = "Please check your username and password again"
+		return render(request, "review/login.html", context={'message': message})
+			
+	# if this user is not guest and this user wants to go to login page, redirect back to index 
+	if ('user_number_id' in request.session):
+		return redirect("review-index")
 	
+	return render(request, "review/login.html")
+	
+def logout_user(request):
+	del request.session['user_id'], request.session['user_number_id']
 	return render(request, "review/login.html")
 	
 def index(request):
 
-	if (not	request.user.is_authenticated() and 'user_id' not in request.session):
+	if ('user_id' not in request.session):
 		user_id = get_random_string(length=14)
 		request.session.set_expiry(settings.SESSION_EXPIRED)
 		request.session["user_id"] = "guest"+user_id

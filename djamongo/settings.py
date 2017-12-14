@@ -125,8 +125,10 @@ AUTH_USER_MODEL = 'users.User'
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_DIR = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [STATIC_DIR, ]
+STATICFILES_DIRS = [
+	os.path.join(BASE_DIR, 'static'),
+	os.path.join(BASE_DIR, 'node_modules')
+]
 
 LOGIN_REDIRECT_URL = '/dashboard'
 LOGIN_URL = '/dashboard/login/'

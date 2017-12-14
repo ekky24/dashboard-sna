@@ -122,8 +122,9 @@ body {
     margin: 0px;
 }
 
-.a{
-	width: 30%;
+.tag-span {
+	display: inline-block;
+	width: 40px;
 }
 
 .word-control {

@@ -325,23 +325,23 @@ $(document).ready (function (){
 		if (sentencePartWords.length == 1) {
 			return [{
 				"word": $(sentencePartWords[0]).text(),
-				"tag": "S-" + sentencePartTag
+				"tags": "S-" + sentencePartTag
 			}]
 		}
 		
 		let words = []
 		
 		// push B-XX
-		words.push({"word": $(sentencePartWords[0]).text(), "tag": "B-" + sentencePartTag })
+		words.push({"word": $(sentencePartWords[0]).text(), "tags": "B-" + sentencePartTag })
 		
 		// push I-XX
 		for (let i=1; i < sentencePartWords.length - 1; i++) {
-			words.push({"word": $(sentencePartWords[i]).text(), "tag": "I-" + sentencePartTag})
+			words.push({"word": $(sentencePartWords[i]).text(), "tags": "I-" + sentencePartTag})
 		}
 		
 		// push E-XX
 		let last = sentencePartWords.length - 1
-		words.push({"word": $(sentencePartWords[last]).text(), "tag": "E-" + sentencePartTag})
+		words.push({"word": $(sentencePartWords[last]).text(), "tags": "E-" + sentencePartTag})
 		
 		return words
 	}

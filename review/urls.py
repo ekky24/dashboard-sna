@@ -6,5 +6,5 @@ from . import views
 urlpatterns = [
 	url(r'^$', views.index, name='review-index'), # /review will use index.html from template
 	url(r'^login/$', views.login_user, name='review-login'),
-	url(r'^logout/$', logout, {'next_page': '/review/login'}, name='review-logout')
+	url(r'^logout/$', views.logout_user, name='review-logout')
 ]
