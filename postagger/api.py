@@ -103,19 +103,32 @@ def on_overview_requested (request):
 	
 	return JsonResponse(response)
 	
-def on_search_requested (request, searchkey):
+def on_search_requested (request, searchkey, status, page):
+	search_criteria = {
+		'$and': [
+			{'sentence': {'$exists': True}},
+			{'status': {'$exists': True}}
+		]
+	}
+
+	if (searchkey != ''):
+		search_criteria['$and'][0]['sentence'] = {'$regex': '.*' + searchkey + '.*'}
+	
+	if (status in ('pending','completed')):
+		search_criteria['$and'][1]['status'] = status
+
 	response = {"matched": list()}
-	sentences_searched = Evaluation.objects.mongo_find({'sentence': {'$regex': '.*' + searchkey + '.*'}})
+	sentences_searched = Evaluation.objects.mongo_find(search_criteria).skip((int(page) - 1) * 10).limit(10)
 	
 	for sentence in sentences_searched:
-		sentence['_id'] = string(sentence['_id'])
+		sentence['_id'] = str(sentence['_id'])
 		response['matched'].append(sentence)
-		auto_tagged = sentences_searched[s]['auto_tag']
+		auto_tagged = sentence['auto_tag']
 		
 		if 'verify_tag' not in sentence:
 			continue
 			
-		reviews = len(sentences_searched[s]['verify_tag'])
+		reviews = sentence['verify_tag']
 		
 		# calculate accuracy for each word
 		for t in range(0, len(auto_tagged)):
