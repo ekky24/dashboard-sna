@@ -89,9 +89,9 @@ function displayAccuracyChart (chartDivName, percentage) {
 function getOverviewDetail () {
 	$.get('/postagger/overview/', function (result){
 		$('#reviewed-count').text(result['evaluated_total'])
-		displayAccuracyChart("accuracy-total", (result['accuracy_total'] * 100).toFixed(1))
-		displayAccuracyChart("accuracy-iobes", (result['accuracy_iobes'] * 100).toFixed(1))
-		displayAccuracyChart("accuracy-pos", (result['accuracy_pos'] * 100).toFixed(1))
+		displayAccuracyChart("accuracy-total", (result['accuracy_total'] * 100).toFixed(2))
+		displayAccuracyChart("accuracy-iobes", (result['accuracy_iobes'] * 100).toFixed(2))
+		displayAccuracyChart("accuracy-pos", (result['accuracy_pos'] * 100).toFixed(2))
 	}) 
 }
 	

@@ -28,9 +28,7 @@ def on_fetch (request, userid):
 					{ 'verify_tag.user_id': { 
 						'$ne': this_user_id
 					}},
-					{'verify_tag.length': {
-						'$lt': 10
-					}}
+					{'$where':'this.verify_tag.length<10'}
 				]
 			}]
 		}
@@ -104,6 +102,7 @@ def on_overview_requested (request):
 	return JsonResponse(response)
 	
 def on_search_requested (request, searchkey, status, page):
+	
 	search_criteria = {
 		'$and': [
 			{'sentence': {'$exists': True}},
@@ -112,7 +111,7 @@ def on_search_requested (request, searchkey, status, page):
 	}
 
 	if (searchkey != ''):
-		search_criteria['$and'][0]['sentence'] = {'$regex': '.*' + searchkey + '.*'}
+		search_criteria['$and'][0]['sentence'] = {'$regex': '.*' + searchkey.replace("%20", " ") + '.*'}
 	
 	if (status in ('pending','completed')):
 		search_criteria['$and'][1]['status'] = status
@@ -134,5 +133,7 @@ def on_search_requested (request, searchkey, status, page):
 		for t in range(0, len(auto_tagged)):
 			right_tag = sum([1 for a in range(0, len(reviews)) if auto_tagged[t]['tags'] == reviews[a]['tag'][t]['tags']])
 			auto_tagged[t]['accuracy'] = right_tag / len(reviews)
+			
+		del sentence['verify_tag']
 		
 	return JsonResponse(response)
