@@ -22,7 +22,7 @@ for u in range(0,10):
 	users.append('user' + ''.join(choices(ascii_lowercase + ascii_uppercase + digits, k=14)))
 
 # fill review
-client = MongoClient('192.168.228.163', 27017)
+client = MongoClient('10.30.41.82', 27017)
 db = client['djamongo']
 
 evaluation_collection = db.postagger_evaluation

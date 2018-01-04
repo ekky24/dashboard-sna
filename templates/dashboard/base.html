@@ -8,14 +8,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% endblock %} -  RenderFarm Management</title>
+	
     <!-- Bootstrap core CSS -->
-    <link href="{% static 'templates/dashboard/css/bootstrap.min.css' %}" rel='stylesheet' type='text/css' />
-    <link href="{% static 'templates/dashboard/css/font-awesome.min.css' %}" rel='stylesheet' type='text/css' />
-    <link href="{% static 'templates/dashboard/css/animate.min.css' %}" rel='stylesheet' type='text/css' />
-    <link href="{% static 'templates/dashboard/css/fontastic.css' %}" rel='stylesheet' type='text/css' 
+    <link href="{% static 'templates/dashboard/css/bootstrap.min.css' %}" rel='stylesheet' type='text/css'>
+    <link href="{% static 'templates/dashboard/css/font-awesome.min.css' %}" rel='stylesheet' type='text/css'>
+    <link href="{% static 'templates/dashboard/css/animate.min.css' %}" rel='stylesheet' type='text/css'>
+    <link href="{% static 'templates/dashboard/css/fontastic.css' %}" rel='stylesheet' type='text/css'> 
 	
 	<!-- NProgress -->
 	<link href="{% static 'nprogress/nprogress.css' %}" rel='stylesheet' type='text/css' />
+	
+	<!-- main -->
+	<link href="{% static 'templates/dashboard/css/main.css' %}" rel='stylesheet' type='text/css'> 
 
 	{% block header_asset %}{% endblock %}   
 
@@ -161,6 +165,25 @@
 						</span>
 						</div>
 					</div>
+					<div id="container search-result">
+						<table class="table table-striped" id="table-results" hidden>
+						<thead>
+						<tr>
+							<th style="width:3%">#</th>
+							<th style="width:72%">Sentence</th>
+							<th style="width:10%">Status</th>
+							<th style="width:10%">Action</th>
+						</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+						</table>
+						 <ul class="pagination" id="page-indicator">
+						    <li id="prev-btn" style="display:none;"><a>Previous</a></li>
+							<li id="next-btn" style="display:none;"><a>Next</a></li>
+						</ul> 
+					</div>
 					</div>
 				</div>
 			</div>
@@ -171,7 +194,14 @@
 
 {% include "dashboard/partial/footer.html" %}
 
-{% block footer_asset %}{% endblock %}   
+{% block footer_asset %}{% endblock %}
+<!-- jQuery -->
+<script type="text/javascript" src="{% static 'templates/dashboard/js/jquery.min.js' %}"></script>
+
+<!-- bootstrap 3 js -->
+<script type="text/javascript" src="{% static 'templates/dashboard/js/bootstrap.min.js' %}"></script>
+
+<!-- custom script -->
 <script type="text/javascript" src="{% static 'templates/dashboard/js/custom.js' %}"></script>
 <script type="text/javascript" src="{% static 'templates/dashboard/js/dashboard.js' %}"></script>
 <script type="text/javascript" src="{% static 'templates/dashboard/js/qilara.js' %}"></script>
