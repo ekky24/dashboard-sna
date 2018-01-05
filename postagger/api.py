@@ -105,19 +105,28 @@ def on_search_requested (request, searchkey, status, page):
 	
 	search_criteria = {
 		'$and': [
-			{'sentence': {'$exists': True}},
-			{'status': {'$exists': True}}
+			{'sentence': {'$exists': True}}
 		]
 	}
 
 	if (searchkey != ''):
-		search_criteria['$and'][0]['sentence'] = {'$regex': '.*' + searchkey.replace("%20", " ") + '.*'}
+		search_criteria['$and'][0]['sentence'] = {
+			'$regex': '.*' + searchkey.replace("%20", " ") + '.*', 
+			'$options': 'i'
+		}
 	
 	if (status in ('pending','completed')):
-		search_criteria['$and'][1]['status'] = status
-
-	response = {"matched": list()}
-	sentences_searched = Evaluation.objects.mongo_find(search_criteria).skip((int(page) - 1) * 10).limit(10)
+		search_criteria['$and'].append({'status': status})
+	
+	sentences_per_page = 10
+	response = {
+		'matched': list(),
+		'max_page': 0,
+	}
+	
+	all_matched = Evaluation.objects.mongo_find(search_criteria)
+	response['max_page'] = (all_matched.count() // sentences_per_page) + 1
+	sentences_searched = all_matched.skip((int(page) - 1) * sentences_per_page).limit(sentences_per_page)
 	
 	for sentence in sentences_searched:
 		sentence['_id'] = str(sentence['_id'])
