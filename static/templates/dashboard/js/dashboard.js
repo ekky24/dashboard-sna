@@ -7,97 +7,6 @@ let ACCURACY_COLOR = {
 let globalVarPage = 1
 let globalVarMaxPage = 1
 
-function onSearchClick () {
-	let selected = $('#select-category').val()
-	let searchThis = $('#search-bar').val().replace(" ","%20")
-	
-	$.get("/postagger/search/" + searchThis + "/" + selected + "/1/", function (result, status) {
-		initPaginationSearch(result)
-		displaySearchResult(result)
-		displayPagination()
-	})
-}
-
-function initCustomizedChartConfig () {
-	Chart.pluginService.register({
-	beforeDraw: function (chart) {
-		if (!chart.config.options.elements.center) return 
-
-		//Get ctx from string
-		let ctx = chart.chart.ctx
-		
-		//Get options from the center object in options
-		let centerConfig = chart.config.options.elements.center
-		let fontStyle = centerConfig.fontStyle || 'Roboto'
-		let txt = centerConfig.text
-		
-		let color = centerConfig.color || '#000'
-		let sidePadding = centerConfig.sidePadding || 20
-		let sidePaddingCalculated = (sidePadding/100) * (chart.innerRadius * 2)
-		//Start with a base font of 30px
-		ctx.font = "30px " + fontStyle
-		
-		//Get the width of the string and also the width of the element minus 10 to give it 5px side padding
-		let stringWidth = ctx.measureText(txt).width
-		let elementWidth = (chart.innerRadius * 2) - sidePaddingCalculated
-
-		// Find out how much the font can grow in width.
-		let widthRatio = elementWidth / stringWidth
-		let newFontSize = Math.floor(30 * widthRatio)
-		let elementHeight = (chart.innerRadius * 2)
-
-		// Pick a new font size so it will not be larger than the height of label.
-		let fontSizeToUse = Math.min(newFontSize, elementHeight)
-
-		//Set font settings to draw it correctly.
-		ctx.textAlign = 'center'
-		ctx.textBaseline = 'middle'
-		let centerX = ((chart.chartArea.left + chart.chartArea.right) / 2)
-		let centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2)
-		ctx.font = fontSizeToUse+"px " + fontStyle
-		ctx.fillStyle = color
-		
-		//Draw text in center
-		ctx.fillText(txt, centerX, centerY)
-		
-	}
-})
-}
-
-function displayAccuracyChart (chartDivName, percentage) {
-	let ctx = document.getElementById(chartDivName + "-chart").getContext('2d')
-	let myChart = new Chart(ctx, {
-	  type: 'doughnut',
-	  data: {
-		labels: [],
-		datasets: [{
-			backgroundColor: [
-				ACCURACY_COLOR[chartDivName],
-				"#ffffff"
-			],
-			data: [percentage, 100 - percentage]
-		}]
-	  },
-	  options: {
-		  maintainAspectRatio: false,
-		  tooltips: {enabled: false},
-		  elements: {
-			center: {
-				text: String(percentage) + '%',
-				color: '#000000', // Default is #000000
-				fontStyle: 'Arial', // Default is Arial
-				sidePadding: 20 // Defualt is 20 (as a percentage)
-			}
-		}
-	  }
-	})
-}
-
-function initPaginationSearch (result) {
-	globalVarPage = 1
-	globalVarMaxPage = result['max_page']
-}
-
 function displaySearchResult (searchResultJson) {
 	$('#table-results').hide()
 	
@@ -150,17 +59,16 @@ function displaySearchResult (searchResultJson) {
 	$('#table-results').show()
 }
 
-// this is called when user search reviewed sentence and when previous or next button clicked
 function displayPagination () {
 	// remove page number
 	$('.page-number').remove()
 	$('#prev-btn').show()
 	$('#next-btn').show()
 	
-	let supposedMaxPagination = Math.floor(globalVarPage / 10) + 10
+	let supposedMaxPagination = Math.floor(globalVarPage / 10) * 10 + 10
 	let endPagination = Math.min(supposedMaxPagination, globalVarMaxPage)
 
-	if (globalVarPage < 11)
+	if (globalVarPage == 1)
 		$('#prev-btn').hide()
 	
 	// add page numbers
@@ -179,34 +87,138 @@ function displayPagination () {
 	$($('#prev-btn').next()).addClass('active')
 }
 
-function onSaveClicked () {
-	
-}
-
-function onPageClicked () {
+function searchSentenceOnPage (page, callback) {
 	let selected = $('#select-category').val()
 	let searchThis = $('#search-bar').val().replace(" ","%20")
-	let $pageNumber = $(this)
 	
-	$.get("/postagger/search/" + searchThis + "/" + selected + "/" + $pageNumber.text() + "/", function (result, status) {
-		globalVarPage = parseInt($pageNumber.text())
-		
-		// change active page
-		$('.active').removeClass('active')
-		$pageNumber.closest('li').addClass('active')
-	
-		// display search
+	$.get("/postagger/search/" + searchThis + "/" + selected + "/" + page + "/", function (result, status) {
+		callback(result)
 		displaySearchResult(result)
 	})
 }
 
+// called when user click previoius or next
+function onPaginationChange (direction) {
+	let beginPagination = parseInt($($('#prev-btn').next()).text())
+	let nextPage = direction == 'next' ? beginPagination + 10 : beginPagination - 10
+
+	searchSentenceOnPage(nextPage, function (result) {
+		globalVarPage = nextPage
+		displayPagination()
+	})
+}
+
+// called when user click save
+function onSaveClicked () {
+	
+}
+
+// called when user click a page number
+function onPageClicked () {
+	let $pageNumber = $(this)
+	let nextPage = parseInt($pageNumber.text())
+	
+	searchSentenceOnPage(nextPage, function (result) {
+		globalVarPage = nextPage
+		
+		// change active page
+		$('.active').removeClass('active')
+		$pageNumber.closest('li').addClass('active')
+	})
+}
+
+// called when user search reviewed sentence based on word
+function onSearchClick () {
+	searchSentenceOnPage(1, function (result) {
+		globalVarPage = 1
+		globalVarMaxPage = result['max_page']
+
+		displayPagination()
+	})
+}
+
+function displayAccuracyChart (chartDivName, percentage) {
+	let ctx = document.getElementById(chartDivName + "-chart").getContext('2d')
+	let myChart = new Chart(ctx, {
+	  type: 'doughnut',
+	  data: {
+		labels: [],
+		datasets: [{
+			backgroundColor: [
+				ACCURACY_COLOR[chartDivName],
+				"#ffffff"
+			],
+			data: [percentage, 100 - percentage]
+		}]
+	  },
+	  options: {
+		  maintainAspectRatio: false,
+		  tooltips: {enabled: false},
+		  elements: {
+			center: {
+				text: String(percentage) + '%',
+				color: '#000000', // Default is #000000
+				fontStyle: 'Arial', // Default is Arial
+				sidePadding: 20 // Defualt is 20 (as a percentage)
+			}
+		}
+	  }
+	})
+}
+
 function getOverviewDetail () {
-	$.get('/postagger/overview/', function (result){
+	$.get('/postagger/overview/', function (result) {
 		$('#reviewed-count').text(result['evaluated_total'])
 		displayAccuracyChart("accuracy-total", (result['accuracy_total'] * 100).toFixed(2))
 		displayAccuracyChart("accuracy-iobes", (result['accuracy_iobes'] * 100).toFixed(2))
 		displayAccuracyChart("accuracy-pos", (result['accuracy_pos'] * 100).toFixed(2))
 	}) 
+}
+
+function initCustomizedChartConfig () {
+	Chart.pluginService.register({
+	beforeDraw: function (chart) {
+		if (!chart.config.options.elements.center) return 
+
+		//Get ctx from string
+		let ctx = chart.chart.ctx
+		
+		//Get options from the center object in options
+		let centerConfig = chart.config.options.elements.center
+		let fontStyle = centerConfig.fontStyle || 'Roboto'
+		let txt = centerConfig.text
+		
+		let color = centerConfig.color || '#000'
+		let sidePadding = centerConfig.sidePadding || 20
+		let sidePaddingCalculated = (sidePadding/100) * (chart.innerRadius * 2)
+		//Start with a base font of 30px
+		ctx.font = "30px " + fontStyle
+		
+		//Get the width of the string and also the width of the element minus 10 to give it 5px side padding
+		let stringWidth = ctx.measureText(txt).width
+		let elementWidth = (chart.innerRadius * 2) - sidePaddingCalculated
+
+		// Find out how much the font can grow in width.
+		let widthRatio = elementWidth / stringWidth
+		let newFontSize = Math.floor(30 * widthRatio)
+		let elementHeight = (chart.innerRadius * 2)
+
+		// Pick a new font size so it will not be larger than the height of label.
+		let fontSizeToUse = Math.min(newFontSize, elementHeight)
+
+		//Set font settings to draw it correctly.
+		ctx.textAlign = 'center'
+		ctx.textBaseline = 'middle'
+		let centerX = ((chart.chartArea.left + chart.chartArea.right) / 2)
+		let centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2)
+		ctx.font = fontSizeToUse+"px " + fontStyle
+		ctx.fillStyle = color
+		
+		//Draw text in center
+		ctx.fillText(txt, centerX, centerY)
+		
+	}
+})
 }
 	
 $(document).ready(function(){

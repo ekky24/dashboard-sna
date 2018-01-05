@@ -16,15 +16,15 @@
     <link href="{% static 'templates/dashboard/css/fontastic.css' %}" rel='stylesheet' type='text/css'> 
 	
 	<!-- NProgress -->
-	<link href="{% static 'nprogress/nprogress.css' %}" rel='stylesheet' type='text/css' />
+	<link href="{% static 'nprogress/nprogress.css' %}" rel='stylesheet' type='text/css'>
 	
 	<!-- main -->
 	<link href="{% static 'templates/dashboard/css/main.css' %}" rel='stylesheet' type='text/css'> 
 
 	{% block header_asset %}{% endblock %}   
 
-	<link href="{% static 'templates/dashboard/css/custom.min.css' %}" rel='stylesheet' type='text/css' />
-	<link href="{% static 'templates/dashboard/css/qilara.css' %}" rel='stylesheet' type='text/css' />
+	<link href="{% static 'templates/dashboard/css/custom.min.css' %}" rel='stylesheet' type='text/css'>
+	<link href="{% static 'templates/dashboard/css/qilara.css' %}" rel='stylesheet' type='text/css'>
 </head>
 
   <body class="nav-md">
@@ -180,8 +180,8 @@
 						</tbody>
 						</table>
 						 <ul class="pagination" id="page-indicator">
-						    <li id="prev-btn" style="display:none;"><a>Previous</a></li>
-							<li id="next-btn" style="display:none;"><a>Next</a></li>
+						    <li id="prev-btn" style="display:none;"><a onClick="onPaginationChange('previous')">Previous</a></li>
+							<li id="next-btn" style="display:none;"><a onClick="onPaginationChange('next')">Next</a></li>
 						</ul> 
 					</div>
 					</div>
