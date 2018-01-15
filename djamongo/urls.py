@@ -4,7 +4,8 @@ from django.conf import settings
 
 urlpatterns = [
 	url(r'^dashboard/', include('dashboard.urls')),
-	url(r'^pos_tagger/', include('postagger.front_urls'))
+	url(r'^postagger/', include('postagger.urls')),
+	url(r'^review/', include('review.urls'))
 ]
 
 if settings.DEBUG:

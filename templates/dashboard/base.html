@@ -8,18 +8,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% endblock %} -  RenderFarm Management</title>
+	
     <!-- Bootstrap core CSS -->
-    <link href="{% static "templates/dashboard/css/bootstrap.min.css" %}" rel='stylesheet' type='text/css' />
-    <link href="{% static "templates/dashboard/css/font-awesome.min.css" %}" rel='stylesheet' type='text/css' />
-    <link href="{% static "templates/dashboard/css/animate.min.css" %}" rel='stylesheet' type='text/css' />
-    <link href="{% static "templates/dashboard/css/fontastic.css" %}" rel='stylesheet' type='text/css' />
+    <link href="{% static 'templates/dashboard/css/bootstrap.min.css' %}" rel='stylesheet' type='text/css'>
+    <link href="{% static 'templates/dashboard/css/font-awesome.min.css' %}" rel='stylesheet' type='text/css'>
+    <link href="{% static 'templates/dashboard/css/animate.min.css' %}" rel='stylesheet' type='text/css'>
+    <link href="{% static 'templates/dashboard/css/fontastic.css' %}" rel='stylesheet' type='text/css'> 
+	
 	<!-- NProgress -->
-	<link href="{% static "vendors/nprogress/nprogress.css" %}" rel='stylesheet' type='text/css' />
+	<link href="{% static 'nprogress/nprogress.css' %}" rel='stylesheet' type='text/css'>
+	
+	<!-- main -->
+	<link href="{% static 'templates/dashboard/css/main.css' %}" rel='stylesheet' type='text/css'> 
 
 	{% block header_asset %}{% endblock %}   
 
-	<link href="{% static "templates/dashboard/css/custom.min.css" %}" rel='stylesheet' type='text/css' />
-	<link href="{% static "templates/dashboard/css/qilara.css" %}" rel='stylesheet' type='text/css' />
+	<link href="{% static 'templates/dashboard/css/custom.min.css' %}" rel='stylesheet' type='text/css'>
+	<link href="{% static 'templates/dashboard/css/qilara.css' %}" rel='stylesheet' type='text/css'>
 </head>
 
   <body class="nav-md">
@@ -62,9 +67,10 @@
         </div>
 
        {% include "dashboard/partial/top_nav.html" %}
-
+		
         <!-- page content -->
         <div class="right_col" role="main">
+		
             {% if messages %}
 	        	{% for message in messages %}
 	                <div class="row margin-top-60">
@@ -74,8 +80,52 @@
 	                </div>
 	            {% endfor %}
 	        {% endif %}
-
-            
+			
+			<div class="row">
+			  <div class="animated flipInX col-lg-3 col-md-3 col-sm-6 col-xs-12 tile_stats_count">
+				  <div class="tile-stats">
+					  <div class="icon">
+						<i class="fa fa-comments-o"></i>
+					  </div>
+					  <div class="count" id="reviewed-count">0</div>
+					  <h3>Reviewed</h3>
+					  <p>Total sentences reviewed</p>
+				  </div>
+			  </div>
+			  <div class="animated flipInX col-lg-3 col-md-3 col-sm-6 col-xs-12">
+				  <div class="x_panel">
+					  <div class="x_title">
+					    <h2>Overall Accuracy</h2>
+						<div class="clearfix"></div>
+					  </div>
+					  <div class="x_content" style="width:100%">
+						<canvas id="accuracy-total-chart"></canvas>
+					  </div>
+				  </div>
+			  </div>
+			  <div class="animated flipInX col-lg-3 col-md-3 col-sm-6 col-xs-12">
+				  <div class="x_panel">
+					  <div class="x_title">
+					    <h2>IOBES accuracy</h2>
+						<div class="clearfix"></div>
+					  </div>
+					  <div class="x_content" style="width:100%">
+						<canvas id="accuracy-iobes-chart"></canvas>
+					  </div>
+				  </div>
+			  </div>
+			  <div class="animated flipInX col-lg-3 col-md-3 col-sm-6 col-xs-12">
+				  <div class="x_panel">
+					  <div class="x_title">
+					    <h2>POS Accuracy</h2>
+						<div class="clearfix"></div>
+					  </div>
+					  <div class="x_content" style="width:100%">
+						<canvas id="accuracy-pos-chart"></canvas>
+					  </div>
+				  </div>
+			  </div>
+            </div>
             {% if form.errors %}
                 <!-- Error messaging -->
                 <div id="errors">
@@ -91,7 +141,52 @@
                 </div>
                 <!-- /Error messaging -->
             {% endif %}
-
+			
+			<div class="row" style="margin-top:20px">
+				<div class="x_panel">
+					<div class="x_title">
+					    <h2>IOBES accuracy</h2>
+						<div class="clearfix"></div>
+					</div>
+					<div class="x_content">
+					<div class="col-lg-2">
+					
+						<select class="select2_single form-control" tabindex="-1" id="select-category">
+                            <option value="all" selected>All</option>
+                            <option value="completed">Completed</option>
+                            <option value="pending">Pending</option>
+                        </select>
+					</div>
+					<div class="col-lg-10">
+						<div class="input-group">
+						<input class="form-control" placeholder="Cari berdasarkan kata" type="text" id="search-bar">
+						<span class="input-group-btn">
+						<button type="button" class="btn btn-primary" onclick="onSearchClick()">Cari</button>
+						</span>
+						</div>
+					</div>
+					<div id="container search-result">
+						<table class="table table-striped" id="table-results" hidden>
+						<thead>
+						<tr>
+							<th style="width:3%">#</th>
+							<th style="width:72%">Sentence</th>
+							<th style="width:10%">Status</th>
+							<th style="width:10%">Action</th>
+						</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+						</table>
+						 <ul class="pagination" id="page-indicator">
+						    <li id="prev-btn" style="display:none;"><a onClick="onPaginationChange('previous')">Previous</a></li>
+							<li id="next-btn" style="display:none;"><a onClick="onPaginationChange('next')">Next</a></li>
+						</ul> 
+					</div>
+					</div>
+				</div>
+			</div>
            
             {% block content %}{% endblock %}
         </div>
@@ -99,10 +194,18 @@
 
 {% include "dashboard/partial/footer.html" %}
 
-{% block footer_asset %}{% endblock %}   
+{% block footer_asset %}{% endblock %}
+<!-- jQuery -->
+<script type="text/javascript" src="{% static 'templates/dashboard/js/jquery.min.js' %}"></script>
 
-<script type="text/javascript" src="{% static "templates/dashboard/js/custom.js" %}"></script>
-<script type="text/javascript" src="{% static "templates/dashboard/js/qilara.js" %}"></script>
+<!-- bootstrap 3 js -->
+<script type="text/javascript" src="{% static 'templates/dashboard/js/bootstrap.min.js' %}"></script>
+
+<!-- custom script -->
+<script type="text/javascript" src="{% static 'templates/dashboard/js/custom.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/dashboard/js/dashboard.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/dashboard/js/qilara.js' %}"></script>
+<script type="text/javascript" src="{% static 'chart.js/dist/Chart.js' %}"></script>
 </body>
 
 </html>

@@ -1,3 +1,30 @@
-from django.db import models
+from djongo import models
 
-# Create your models here.
+class WordTag(models.Model):
+	word = models.CharField(max_length=50)
+	tags = models.CharField(max_length=6)
+	class Meta:
+		abstract = True
+	
+class UserTag(models.Model):
+	user_id = models.CharField(max_length=20)
+	created_at = models.DateTimeField()
+	tag = models.ArrayModelField(model_container=WordTag)	
+	class Meta:
+		abstract = True
+
+# postagger_evaluation collection
+class Evaluation(models.Model):
+	source = models.CharField(max_length=10)
+	source_id = models.CharField(max_length=10)
+	model_name = models.CharField(max_length=20)
+	model_version = models.CharField(max_length=6)
+	sentence = models.CharField(max_length=200)
+	sentence_idx = models.IntegerField(default=0)
+	status = models.CharField(max_length=10)
+	auto_tag = models.ArrayModelField(model_container=WordTag)
+	user_tag = models.ArrayModelField(model_container=UserTag)
+	verified_tag = models.ArrayModelField(model_container=WordTag)
+	
+	objects = models.DjongoManager()
+	
