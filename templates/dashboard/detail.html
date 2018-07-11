@@ -1,0 +1,71 @@
+{% extends "dashboard/base.html" %}
+
+{% block content %}
+<div class="row" style="padding-left:2%;padding-right:1%; padding-top:1%">
+		<div class="animated flipInX col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="x_panel">
+				<div class="x_title">
+					<h2>Sentence</h2>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content" style="width:100%">
+					<label id="lSentence"></label>
+				</div>
+			</div>
+		</div>
+    </div>
+    <div class="row" style="padding-left:2%;padding-right:1%; margin-top:20px;">
+    	<div class="animated flipInX col-lg-4 col-md-4 col-sm-12 col-xs-12">
+			<div class="x_panel">
+				<div class="x_title">
+					<h2>Overall Accuracy</h2>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content" style="width:100%">
+					<label id="overall_accuracy"></label>
+				</div>
+			</div>
+		</div>
+		<div class="animated flipInX col-lg-4 col-md-4 col-sm-12 col-xs-12">
+			<div class="x_panel">
+				<div class="x_title">
+					<h2>IOBES accuracy</h2>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content" style="width:100%">
+					<label id="iobes_accuracy"></label>
+				</div>
+			</div>
+		</div>
+		<div class="animated flipInX col-lg-4 col-md-4 col-sm-12 col-xs-12">
+			<div class="x_panel">
+				<div class="x_title">
+					<h2>POS Accuracy</h2>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content" style="width:100%">
+					<label id="pos_accuracy"></label>
+				</div>
+			</div>
+		</div>
+    </div>
+    <div class="row" style="margin-top:20px;padding-left:1%;padding-right:1%">
+		<div class="x_panel">
+			<div>
+				<table class="table table-striped" id="table-detail">
+					<thead>
+						<tr>
+                            <th style="width:5%">#</th>
+							<th style="width:70%">Sentence</th>
+							<th style="width:23%">User</th>
+						</tr>
+					</thead>
+					<tbody>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+    <p id="searchid" style="display: none">{{ doc_id }}</p>
+{% endblock %}

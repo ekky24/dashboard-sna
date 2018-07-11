@@ -14,17 +14,17 @@ function displaySearchResult (searchResultJson) {
 	if (matchedTotal == 0){
 		let $notFound = $('<h1 style="text-align:center;color:grey;margin:100px;"><b>Not Found</b></h1>')
 		$('#search-result').html($notFound)
-		
 		return
 	}
 	
 	let $tableBody = $('#table-results').find('tbody')
 	$tableBody.empty()
+
 	
 	for (let i=0; i < matchedTotal; i++) {
 		let thisSearchResultRow = searchResultJson['matched'][i]
 		let $tableRow = $('<tr></tr>').attr('oid', thisSearchResultRow['_id'])
-		let tableDataList = [$('<td></td>'), $('<td></td>'), $('<td></td>'), $('<td></td>')]
+		let tableDataList = [$('<td></td>'), $('<td></td>'), $('<td></td>'), $('<td></td>'), $('<td></td>')]
 		
 		// sentence number
 		tableDataList[0].text((i + 1) + (globalVarPage - 1) * 10)
@@ -32,31 +32,227 @@ function displaySearchResult (searchResultJson) {
 		// display sentence word		
 		let autoTag = searchResultJson['matched'][i]['auto_tag']
 		for (let j=0; j < autoTag.length; j++) {
-			// create word span
-			let $wordSpan = $('<span class="label"></span>').text(autoTag[j]['word'])
-			// if this word accuracy below 70%, this word will be marked with red color
-			$wordSpan.addClass( autoTag[j]['accuracy'] > 0.7 ? 'label-primary' : 'label-danger' )
-			// whitespace is important !! 
-			tableDataList[1].append($wordSpan).append(" ")
+			// create tags span
+			let tagsSpan = autoTag[j]['tags']
+			//Tags 
+			let tagss = tagsSpan.substring(2, 6)
+			//sub Tags
+			let subTagsSpan = tagsSpan.substring(0, 1)
+			//Check sub Tags B I E
+			if (subTagsSpan == 'B') {  
+				let tagB = autoTag[j]['word']
+				let tagI = autoTag[j+1]['word']
+				let tagE = autoTag[j+2]['word']
+				let wordBIE = tagB +" "+ tagI +" "+ tagE + " "
+				let $wordSpan = $('<button class="btn btn-xs" style="color:white"></button>').html(wordBIE + '<span class="badge" backgroundColor="white">' + tagss + '</span>')
+				
+				//label sentence
+				switch (tagss) {
+					case 'CC':
+					case 'CD':
+					case 'OD':
+					case 'DT':
+					case 'FW':
+					case 'IN':
+					case 'JJ':
+						$wordSpan.addClass('label-success')
+						break
+					case 'MD':
+					case 'NEG':
+					case 'NN':
+					case 'WH':
+					case 'X' :
+					case 'Z' :
+					case 'AT':
+						$wordSpan.addClass('label-warning')
+						break
+					case 'NNP':
+					case 'NND':
+					case 'PR' :
+					case 'PRP':
+					case 'RB' :
+					case 'RP' :
+					case 'SC' :
+						$wordSpan.addClass('label-danger')
+						break
+					case 'SYM':
+					case 'UH':
+					case 'VB' :
+					case 'DISC':
+					case 'HASH' :
+					case 'URL' :
+					case 'EMO' :
+						$wordSpan.addClass('label-info')
+						break
+				}
+
+				// whitespace is important !! 
+				tableDataList[1].append($wordSpan).append(" ")
+
+			} else if (subTagsSpan == 'S') { 
+				let $wordSpan = $('<button class="btn btn-xs" style="color:white"></button>').html(autoTag[j]['word'] +" "+ '<span class="badge" backgroundColor="white">' + tagss + '</span>')
+				
+				//label sentence
+				switch (tagss) {
+					case 'CC':
+					case 'CD':
+					case 'OD':
+					case 'DT':
+					case 'FW':
+					case 'IN':
+					case 'JJ':
+						$wordSpan.addClass('label-success')
+						break
+					case 'MD':
+					case 'NEG':
+					case 'NN':
+					case 'WH':
+					case 'X' :
+					case 'Z' :
+					case 'AT':
+						$wordSpan.addClass('label-warning')
+						break
+					case 'NNP':
+					case 'NND':
+					case 'PR' :
+					case 'PRP':
+					case 'RB' :
+					case 'RP' :
+					case 'SC' :
+						$wordSpan.addClass('label-danger')
+						break
+					case 'SYM':
+					case 'UH':
+					case 'VB' :
+					case 'DISC':
+					case 'HASH' :
+					case 'URL' :
+					case 'EMO' :
+						$wordSpan.addClass('label-info')
+						break
+				}
+				// whitespace is important !! 
+				tableDataList[1].append($wordSpan).append(" ")
+			}
 		}
+
+		//Tagged Count
+		let verifyTags = searchResultJson['matched'][i]['verify_tag']
+		let $taggedCount = $('<label></label>').text(verifyTags.length)
+		tableDataList[2].append($taggedCount)
+
+		//accuracy
+		let accuracy_sentence = (searchResultJson['accuracy'][i] * 100).toFixed(2)
+		let $accuracy = $('<label></label>').text(accuracy_sentence + "%")
+		tableDataList[3].append($accuracy)
 		
-		// is this sentence completed? mark if completed
-		let status = (typeof thisSearchResultRow['status'] !== 'undefined') && (thisSearchResultRow['status'] === 'completed')
-		let $checkBox = $('<input type="checkbox">Completed</input>').prop('checked', status)
-		let $label = $('<label class="checkbox-inline"></label>').append($checkBox)
-		
-		tableDataList[2].append($label)
-		
-		// add save button
-		let $saveButton = $('<button class="btn btn-primary btn-xs">Save</button>')
-		$saveButton.click( onSaveClicked )
-		tableDataList[3].append($saveButton)
+		// add detail button
+		let $detailButton = $('<a href="detail/' + searchResultJson['matched'][i]['_id'] + '/" class="btn btn-primary btn-xs">Detail</a>')
+		//let $detailButton = $
+		$detailButton.click(onDetailClicked)
+		tableDataList[4].append($detailButton)
 
 		$tableRow.append(tableDataList)
 		$tableBody.append($tableRow)
 	}
 
 	$('#table-results').show()
+}
+
+
+function displayDetailSentence(resultJson) {
+	//sentence
+	$('#lSentence').text(resultJson['sentence'])
+	//let autoTag = resultJson['auto_tag']
+	let verifyTag = resultJson['verify_tag']
+
+	//overall accuracy
+	let accuracy_overall = (resultJson['accuracy'] * 100).toFixed(2)
+	$('#overall_accuracy').text(accuracy_overall + "%")
+
+	//IOBES accuracy
+	let accuracy_iobes = (resultJson['accuracy_iobes'] * 100).toFixed(2)
+	$('#iobes_accuracy').text(accuracy_iobes + "%")
+
+	//POS accuracy
+	let accuracy_pos = (resultJson['accuracy_pos'] * 100).toFixed(2)
+	$('#pos_accuracy').text(accuracy_pos + "%")
+
+	//table
+	let $tableBody1 = $('#table-detail').find('tbody')
+	$tableBody1.empty()
+	for (let i = 0; i < verifyTag.length; i++){
+
+		let $tableRow1 = $('<tr></tr>')
+		let tableDataList1 = [$('<td></td>'), $('<td></td>'), $('<td></td>')]
+
+
+		let tagVerif = verifyTag[i]['tag']
+		for (let j = 0; j < tagVerif.length; j++){
+			//number
+			tableDataList1[0].text((i + 1))
+
+			//word & tags
+			let tags_detail = tagVerif[j]['tags']
+			let tags_pos = tags_detail.substring(2, 6)
+
+			let $wordVerif = $('<button class="btn btn-xs" style="color: white"></button>').html(tagVerif[j]['word'] + "  " +'<span class="badge">'+ tags_detail+'</span>')
+			//label sentence
+				switch (tags_pos) {
+					case 'CC':
+					case 'CD':
+					case 'OD':
+					case 'DT':
+					case 'FW':
+					case 'IN':
+					case 'JJ':
+						$wordVerif.addClass('label-success')
+						break
+					case 'MD':
+					case 'NEG':
+					case 'NN':
+					case 'WH':
+					case 'X' :
+					case 'Z' :
+					case 'AT':
+						$wordVerif.addClass('label-warning')
+						break
+					case 'NNP':
+					case 'NND':
+					case 'PR' :
+					case 'PRP':
+					case 'RB' :
+					case 'RP' :
+					case 'SC' :
+						$wordVerif.addClass('label-danger')
+						break
+					case 'SYM':
+					case 'UH':
+					case 'VB' :
+					case 'DISC':
+					case 'HASH' :
+					case 'URL' :
+					case 'EMO' :
+						$wordVerif.addClass('label-info')
+						break
+				}
+			tableDataList1[1].append($wordVerif).append(" ")
+		}
+
+		//user
+		let $userid = verifyTag[i]['user_id']
+		tableDataList1[2].append($userid)
+
+		$tableRow1.append(tableDataList1)
+		$tableBody1.append($tableRow1)
+	}
+}
+
+function getDetailSentence(){
+	let $id = $('#searchid').text()
+	$.get("/postagger/searchid/" + $id, function (result) {
+		displayDetailSentence(result)
+	})
 }
 
 function displayPagination () {
@@ -108,9 +304,8 @@ function onPaginationChange (direction) {
 	})
 }
 
-// called when user click save
-function onSaveClicked () {
-	
+function onDetailClicked(){
+	window.location.href = 'detail'
 }
 
 // called when user click a page number
@@ -132,7 +327,6 @@ function onSearchClick () {
 	searchSentenceOnPage(1, function (result) {
 		globalVarPage = 1
 		globalVarMaxPage = result['max_page']
-
 		displayPagination()
 	})
 }
@@ -224,5 +418,6 @@ function initCustomizedChartConfig () {
 $(document).ready(function(){
 	initCustomizedChartConfig()
 	getOverviewDetail()
+	getDetailSentence()
 })
 
