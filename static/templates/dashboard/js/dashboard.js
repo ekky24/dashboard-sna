@@ -138,32 +138,30 @@ function onSearchClick () {
 }
 
 function displayAccuracyChart (chartDivName, percentage) {
-	let ctx = document.getElementById(chartDivName + "-chart").getContext('2d')
-	let myChart = new Chart(ctx, {
-	  type: 'doughnut',
-	  data: {
-		labels: [],
-		datasets: [{
-			backgroundColor: [
-				ACCURACY_COLOR[chartDivName],
-				"#ffffff"
-			],
-			data: [percentage, 100 - percentage]
-		}]
+	var opts = {
+	  angle: 0.0,
+	  lineWidth: 0.54,
+	  radiusScale: 1,
+	  pointer: {
+		length: 0.7,
+		strokeWidth: 0.035,
+		color: '#000000'
 	  },
-	  options: {
-		  maintainAspectRatio: false,
-		  tooltips: {enabled: false},
-		  elements: {
-			center: {
-				text: String(percentage) + '%',
-				color: '#000000', // Default is #000000
-				fontStyle: 'Arial', // Default is Arial
-				sidePadding: 20 // Defualt is 20 (as a percentage)
-			}
-		}
-	  }
-	})
+	  limitMax: false,
+	  limitMin: false,
+	  generateGradient: true,
+	  highDpiSupport: true,
+	};
+
+	let ctx = document.getElementById(chartDivName + "-chart")
+	$('#' + chartDivName + "-chart").before("<center><h4>" + percentage + " %</h4></center>")
+
+	let gauge = new Gauge(ctx).setOptions(opts)
+	gauge.maxValue = 100
+	gauge.setMinValue(0)
+	gauge.animationSpeed = 32
+	gauge
+	gauge.set(percentage)
 }
 
 function getOverviewDetail () {
@@ -172,6 +170,9 @@ function getOverviewDetail () {
 		displayAccuracyChart("accuracy-total", (result['accuracy_total'] * 100).toFixed(2))
 		displayAccuracyChart("accuracy-iobes", (result['accuracy_iobes'] * 100).toFixed(2))
 		displayAccuracyChart("accuracy-pos", (result['accuracy_pos'] * 100).toFixed(2))
+
+		$('#reviewed-model-name').text(result['model_name'])
+		$('#reviewed-model-version').text("VERSION: " + result['model_version'])
 	}) 
 }
 

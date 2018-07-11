@@ -7,6 +7,12 @@ from django.http import JsonResponse, HttpResponse
 from users.models import User
 from .models import Evaluation
 from .rule import sanitize_tags
+import environ
+import redis
+
+root = environ.Path(__file__) - 2 # three folder back (/a/b/c/ - 3 = /)
+env = environ.Env(DEBUG=(bool, False),) # set default values and casting
+environ.Env.read_env(root('djamongo/.env')) # reading .env file
 
 def on_fetch (request, userid):
 	response = {'unevaluated':None}
@@ -71,34 +77,76 @@ def on_submit (request):
 	return HttpResponse(status=response_code)	
 	
 def on_overview_requested (request):
-	sentences_evaluated = Evaluation.objects.mongo_find({'verify_tag': {'$exists': True}})
+	'''
+	sentences_evaluated = Evaluation.objects.mongo_find({'verify_tag': {'$exists': True},
+				'model_name': str(env('MODEL_NAME')), 'model_version': str(env('MODEL_VERSION'))})
 	response = {
 		"evaluated_total": sentences_evaluated.count(),
 		"accuracy_pos": 0,
 		"accuracy_iobes": 0,
 		"accuracy_total": 0
 	}
-	
-	right_pos, right_iobes, right_iobes_pos, total_word_reviewed = 0, 0, 0, 0
-	
-	for document in sentences_evaluated:
-		auto_tagged = document['auto_tag']
-		reviews = document['verify_tag']
-		total_word_reviewed += len(auto_tagged) * len(reviews)
-		
-		for review in reviews:
-			tag_review = review['tag']
-			
-			# calculate how many is auto tag is equal to user proposed tag
-			right_iobes_pos += sum([1 for a in range(0, len(tag_review)) if tag_review[a]['tags'] == auto_tagged[a]['tags'] ])
-			right_iobes += sum([1 for a in range(0, len(tag_review)) if tag_review[a]['tags'][:1] == auto_tagged[a]['tags'][:1] ])
-			right_pos += sum([1 for a in range(0, len(tag_review)) if tag_review[a]['tags'][2:] == auto_tagged[a]['tags'][2:] ])
-			
+
+	total_evaluation = 0
+	true_overall = 0
+	true_iobes = 0
+	true_pos = 0
+
+	for row in sentences_evaluated:
+		for verify in row['verify_tag']:
+			for tag_index in range(len(verify['tag'])):
+				auto_tag = row['auto_tag'][tag_index]
+				verify_tag = verify['tag'][tag_index]
+
+				try:
+					iobes_auto = auto_tag['tags'][:1]
+					iobes_verify = verify_tag['tags'][:1]
+					pos_auto = auto_tag['tags'][2:]
+					pos_verify = verify_tag['tags'][2:]
+				except(KeyError):
+					print("KeyError")
+				else:
+					""" Overall Calculation """
+					if (auto_tag['tags'] == verify_tag['tags']):
+						true_overall += 1
+
+					""" IOBES Calculation """
+					if (iobes_auto == iobes_verify):
+						true_iobes += 1
+
+					""" POS Calculation """
+					if (pos_auto == pos_verify):
+						true_pos += 1
+
+					total_evaluation += 1
+
 	# calculate accuracy
-	response['accuracy_pos'] = right_pos / max(1, total_word_reviewed)
-	response['accuracy_iobes'] = right_iobes / max(1, total_word_reviewed)
-	response['accuracy_total'] = right_iobes_pos / max(1, total_word_reviewed)
-	
+	response['accuracy_pos'] = (true_overall / total_evaluation)
+	response['accuracy_iobes'] = (true_iobes / total_evaluation)
+	response['accuracy_total'] = (true_overall / total_evaluation)
+	print(type((true_overall / total_evaluation)))
+	'''
+
+	try:
+		conn = redis.StrictRedis(
+			host='127.0.0.1',
+			port=6379,
+			password='')
+		conn.ping()
+		print('Connected!')
+	except Exception as ex:
+		print('Error:', ex)
+		exit('Failed to connect, terminating.')
+
+	response = {
+		"evaluated_total": float(conn.get('total_evaluated')),
+		"accuracy_pos": float(conn.get('pos_accuracy')),
+		"accuracy_iobes": float(conn.get('iobes_accuracy')),
+		"accuracy_total": float(conn.get('overall_accuracy')),
+		"model_name": str(env('MODEL_NAME')),
+		"model_version": str(env('MODEL_VERSION'))
+	}
+
 	return JsonResponse(response)
 	
 def on_search_requested (request, searchkey, status, page):
