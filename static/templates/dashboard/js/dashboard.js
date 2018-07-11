@@ -20,7 +20,6 @@ function displaySearchResult (searchResultJson) {
 	let $tableBody = $('#table-results').find('tbody')
 	$tableBody.empty()
 
-	
 	for (let i=0; i < matchedTotal; i++) {
 		let thisSearchResultRow = searchResultJson['matched'][i]
 		let $tableRow = $('<tr></tr>').attr('oid', thisSearchResultRow['_id'])
@@ -39,7 +38,7 @@ function displaySearchResult (searchResultJson) {
 			//sub Tags
 			let subTagsSpan = tagsSpan.substring(0, 1)
 			let $wordSpan = $('<button class="btn btn-xs" style="color:white"></button>').html(autoTag[j]['word'] +" "+ '<span class="badge" backgroundColor="white">' + tagss + '</span>')
-				//label sentence
+			//label sentence
 			switch (tagss) {
 				case 'CC':
 				case 'CD':
@@ -80,7 +79,6 @@ function displaySearchResult (searchResultJson) {
 			}
 			// whitespace is important !!
 			tableDataList[1].append($wordSpan).append(" ")
-
 		}
 
 		//Tagged Count
@@ -102,37 +100,83 @@ function displaySearchResult (searchResultJson) {
 		$tableRow.append(tableDataList)
 		$tableBody.append($tableRow)
 	}
-
 	$('#table-results').show()
 }
 
 
 function displayDetailSentence(resultJson) {
 	//sentence
-	$('#lSentence').text(resultJson['sentence'])
-	//let autoTag = resultJson['auto_tag']
-	let verifyTag = resultJson['verify_tag']
+	let autoTag = resultJson['auto_tag']
+	for (let a = 0; a < autoTag.length; a++){
+		//word
+		let wordAuto = autoTag[a]['word']
+
+		//tags
+		let tagAuto = autoTag[a]['tags']
+		let tagAutoPos = tagAuto.substring(2, 6)
+
+		let $detail_sentence = $('<button class="btn btn-xs" style="color: white"></button>').html(wordAuto + "  " + '<span class="badge">'+ tagAuto +'</span>')
+		switch (tagAutoPos) {
+			case 'CC':
+			case 'CD':
+			case 'OD':
+			case 'DT':
+			case 'FW':
+			case 'IN':
+			case 'JJ':
+				$detail_sentence.addClass('label-success')
+				break
+			case 'MD':
+			case 'NEG':
+			case 'NN':
+			case 'WH':
+			case 'X' :
+			case 'Z' :
+			case 'AT':
+				$detail_sentence.addClass('label-warning')
+				break
+			case 'NNP':
+			case 'NND':
+			case 'PR' :
+			case 'PRP':
+			case 'RB' :
+			case 'RP' :
+			case 'SC' :
+				$detail_sentence.addClass('label-danger')
+				break
+			case 'SYM':
+			case 'UH':
+			case 'VB' :
+			case 'DISC':
+			case 'HASH' :
+			case 'URL' :
+			case 'EMO' :
+				$detail_sentence.addClass('label-info')
+				break
+		}
+		$('#dSentence').append($detail_sentence).append(" ")
+	}
 
 	//overall accuracy
 	let accuracy_overall = (resultJson['accuracy'] * 100).toFixed(2)
-	$('#overall_accuracy').text(accuracy_overall + "%")
+	displayAccuracyChartDetail("accuracy-total", accuracy_overall)
 
 	//IOBES accuracy
 	let accuracy_iobes = (resultJson['accuracy_iobes'] * 100).toFixed(2)
-	$('#iobes_accuracy').text(accuracy_iobes + "%")
+	displayAccuracyChartDetail("accuracy-iobes", accuracy_iobes)
 
 	//POS accuracy
 	let accuracy_pos = (resultJson['accuracy_pos'] * 100).toFixed(2)
-	$('#pos_accuracy').text(accuracy_pos + "%")
+	displayAccuracyChartDetail("accuracy-pos", accuracy_pos)
 
-	//table
+	//table sentence & user
+	let verifyTag = resultJson['verify_tag']
 	let $tableBody1 = $('#table-detail').find('tbody')
 	$tableBody1.empty()
 	for (let i = 0; i < verifyTag.length; i++){
 
 		let $tableRow1 = $('<tr></tr>')
 		let tableDataList1 = [$('<td></td>'), $('<td></td>'), $('<td></td>')]
-
 
 		let tagVerif = verifyTag[i]['tag']
 		for (let j = 0; j < tagVerif.length; j++){
@@ -145,44 +189,44 @@ function displayDetailSentence(resultJson) {
 
 			let $wordVerif = $('<button class="btn btn-xs" style="color: white"></button>').html(tagVerif[j]['word'] + "  " +'<span class="badge">'+ tags_detail+'</span>')
 			//label sentence
-				switch (tags_pos) {
-					case 'CC':
-					case 'CD':
-					case 'OD':
-					case 'DT':
-					case 'FW':
-					case 'IN':
-					case 'JJ':
-						$wordVerif.addClass('label-success')
-						break
-					case 'MD':
-					case 'NEG':
-					case 'NN':
-					case 'WH':
-					case 'X' :
-					case 'Z' :
-					case 'AT':
-						$wordVerif.addClass('label-warning')
-						break
-					case 'NNP':
-					case 'NND':
-					case 'PR' :
-					case 'PRP':
-					case 'RB' :
-					case 'RP' :
-					case 'SC' :
-						$wordVerif.addClass('label-danger')
-						break
-					case 'SYM':
-					case 'UH':
-					case 'VB' :
-					case 'DISC':
-					case 'HASH' :
-					case 'URL' :
-					case 'EMO' :
-						$wordVerif.addClass('label-info')
-						break
-				}
+			switch (tags_pos) {
+				case 'CC':
+				case 'CD':
+				case 'OD':
+				case 'DT':
+				case 'FW':
+				case 'IN':
+				case 'JJ':
+					$wordVerif.addClass('label-success')
+					break
+				case 'MD':
+				case 'NEG':
+				case 'NN':
+				case 'WH':
+				case 'X' :
+				case 'Z' :
+				case 'AT':
+					$wordVerif.addClass('label-warning')
+					break
+				case 'NNP':
+				case 'NND':
+				case 'PR' :
+				case 'PRP':
+				case 'RB' :
+				case 'RP' :
+				case 'SC' :
+					$wordVerif.addClass('label-danger')
+					break
+				case 'SYM':
+				case 'UH':
+				case 'VB' :
+				case 'DISC':
+				case 'HASH' :
+				case 'URL' :
+				case 'EMO' :
+					$wordVerif.addClass('label-info')
+					break
+			}
 			tableDataList1[1].append($wordVerif).append(" ")
 		}
 
@@ -195,12 +239,39 @@ function displayDetailSentence(resultJson) {
 	}
 }
 
+function displayAccuracyChartDetail(chartName, percentage){
+	var opts = {
+	  angle: 0.0,
+	  lineWidth: 0.54,
+	  radiusScale: 1,
+	  pointer: {
+		length: 0.7,
+		strokeWidth: 0.035,
+		color: '#000000'
+	  },
+	  limitMax: false,
+	  limitMin: false,
+	  generateGradient: true,
+	  highDpiSupport: true,
+	};
+
+	let ctx = document.getElementById(chartName + "-chart")
+	$('#' + chartName + "-chart").before("<center><h4>" + percentage + " %</h4></center>")
+
+	let gauge = new Gauge(ctx).setOptions(opts)
+	gauge.maxValue = 100
+	gauge.setMinValue(0)
+	gauge.animationSpeed = 32
+	gauge.set(percentage)
+}
+
 function getDetailSentence(){
 	let $id = $('#searchid').text()
 	$.get("/postagger/searchid/" + $id, function (result) {
 		displayDetailSentence(result)
 	})
 }
+
 
 function displayPagination () {
 	// remove page number
@@ -306,6 +377,7 @@ function displayAccuracyChart (chartDivName, percentage) {
 	  }
 	})
 }
+
 
 function getOverviewDetail () {
 	$.get('/postagger/overview/', function (result) {

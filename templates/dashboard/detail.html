@@ -1,19 +1,6 @@
 {% extends "dashboard/base.html" %}
 
 {% block content %}
-<div class="row" style="padding-left:2%;padding-right:1%; padding-top:1%">
-		<div class="animated flipInX col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			<div class="x_panel">
-				<div class="x_title">
-					<h2>Sentence</h2>
-					<div class="clearfix"></div>
-				</div>
-				<div class="x_content" style="width:100%">
-					<label id="lSentence"></label>
-				</div>
-			</div>
-		</div>
-    </div>
     <div class="row" style="padding-left:2%;padding-right:1%; margin-top:20px;">
     	<div class="animated flipInX col-lg-4 col-md-4 col-sm-12 col-xs-12">
 			<div class="x_panel">
@@ -22,7 +9,7 @@
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content" style="width:100%">
-					<label id="overall_accuracy"></label>
+					<canvas id="accuracy-total-chart"></canvas>
 				</div>
 			</div>
 		</div>
@@ -33,7 +20,7 @@
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content" style="width:100%">
-					<label id="iobes_accuracy"></label>
+					<canvas id="accuracy-iobes-chart"></canvas>
 				</div>
 			</div>
 		</div>
@@ -44,7 +31,19 @@
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content" style="width:100%">
-					<label id="pos_accuracy"></label>
+					<canvas id="accuracy-pos-chart"></canvas>
+				</div>
+			</div>
+		</div>
+    </div>
+    <div class="row" style="padding-left:2%;padding-right:1%; padding-top:1%">
+		<div class="animated flipInX col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="x_panel">
+				<div class="x_title">
+					<h2>Sentence</h2>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content" id="dSentence" style="width:100%">
 				</div>
 			</div>
 		</div>
