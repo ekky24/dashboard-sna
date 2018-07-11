@@ -38,102 +38,49 @@ function displaySearchResult (searchResultJson) {
 			let tagss = tagsSpan.substring(2, 6)
 			//sub Tags
 			let subTagsSpan = tagsSpan.substring(0, 1)
-			//Check sub Tags B I E
-			if (subTagsSpan == 'B') {  
-				let tagB = autoTag[j]['word']
-				let tagI = autoTag[j+1]['word']
-				let tagE = autoTag[j+2]['word']
-				let wordBIE = tagB +" "+ tagI +" "+ tagE + " "
-				let $wordSpan = $('<button class="btn btn-xs" style="color:white"></button>').html(wordBIE + '<span class="badge" backgroundColor="white">' + tagss + '</span>')
-				
+			let $wordSpan = $('<button class="btn btn-xs" style="color:white"></button>').html(autoTag[j]['word'] +" "+ '<span class="badge" backgroundColor="white">' + tagss + '</span>')
 				//label sentence
-				switch (tagss) {
-					case 'CC':
-					case 'CD':
-					case 'OD':
-					case 'DT':
-					case 'FW':
-					case 'IN':
-					case 'JJ':
-						$wordSpan.addClass('label-success')
-						break
-					case 'MD':
-					case 'NEG':
-					case 'NN':
-					case 'WH':
-					case 'X' :
-					case 'Z' :
-					case 'AT':
-						$wordSpan.addClass('label-warning')
-						break
-					case 'NNP':
-					case 'NND':
-					case 'PR' :
-					case 'PRP':
-					case 'RB' :
-					case 'RP' :
-					case 'SC' :
-						$wordSpan.addClass('label-danger')
-						break
-					case 'SYM':
-					case 'UH':
-					case 'VB' :
-					case 'DISC':
-					case 'HASH' :
-					case 'URL' :
-					case 'EMO' :
-						$wordSpan.addClass('label-info')
-						break
-				}
-
-				// whitespace is important !! 
-				tableDataList[1].append($wordSpan).append(" ")
-
-			} else if (subTagsSpan == 'S') { 
-				let $wordSpan = $('<button class="btn btn-xs" style="color:white"></button>').html(autoTag[j]['word'] +" "+ '<span class="badge" backgroundColor="white">' + tagss + '</span>')
-				
-				//label sentence
-				switch (tagss) {
-					case 'CC':
-					case 'CD':
-					case 'OD':
-					case 'DT':
-					case 'FW':
-					case 'IN':
-					case 'JJ':
-						$wordSpan.addClass('label-success')
-						break
-					case 'MD':
-					case 'NEG':
-					case 'NN':
-					case 'WH':
-					case 'X' :
-					case 'Z' :
-					case 'AT':
-						$wordSpan.addClass('label-warning')
-						break
-					case 'NNP':
-					case 'NND':
-					case 'PR' :
-					case 'PRP':
-					case 'RB' :
-					case 'RP' :
-					case 'SC' :
-						$wordSpan.addClass('label-danger')
-						break
-					case 'SYM':
-					case 'UH':
-					case 'VB' :
-					case 'DISC':
-					case 'HASH' :
-					case 'URL' :
-					case 'EMO' :
-						$wordSpan.addClass('label-info')
-						break
-				}
-				// whitespace is important !! 
-				tableDataList[1].append($wordSpan).append(" ")
+			switch (tagss) {
+				case 'CC':
+				case 'CD':
+				case 'OD':
+				case 'DT':
+				case 'FW':
+				case 'IN':
+				case 'JJ':
+					$wordSpan.addClass('label-success')
+					break
+				case 'MD':
+				case 'NEG':
+				case 'NN':
+				case 'WH':
+				case 'X' :
+				case 'Z' :
+				case 'AT':
+					$wordSpan.addClass('label-warning')
+					break
+				case 'NNP':
+				case 'NND':
+				case 'PR' :
+				case 'PRP':
+				case 'RB' :
+				case 'RP' :
+				case 'SC' :
+					$wordSpan.addClass('label-danger')
+					break
+				case 'SYM':
+				case 'UH':
+				case 'VB' :
+				case 'DISC':
+				case 'HASH' :
+				case 'URL' :
+				case 'EMO' :
+					$wordSpan.addClass('label-info')
+					break
 			}
+			// whitespace is important !!
+			tableDataList[1].append($wordSpan).append(" ")
+
 		}
 
 		//Tagged Count
