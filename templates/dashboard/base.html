@@ -69,7 +69,7 @@
        {% include "dashboard/partial/top_nav.html" %}
 		
         <!-- page content -->
-        <div class="right_col" role="main">
+        <div class="right_col" role="main" style="height: auto;">
 		
             {% if messages %}
 	        	{% for message in messages %}
@@ -98,6 +98,7 @@
 <script type="text/javascript" src="{% static 'templates/dashboard/js/custom.js' %}"></script>
 <script type="text/javascript" src="{% static 'templates/dashboard/js/dashboard.js' %}"></script>
 <script type="text/javascript" src="{% static 'templates/dashboard/js/qilara.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/dashboard/js/gauge.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'chart.js/dist/Chart.js' %}"></script>
 <script type="text/javascript" src="{% static 'templates/dashboard/js/gauge.min.js' %}"></script>
 </body>
