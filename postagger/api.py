@@ -98,6 +98,55 @@ def on_overview_requested (request):
 	}
 
 	return JsonResponse(response)
+	'''
+
+def on_search_id(request, searchid):
+	print(searchid)
+	all_matched = Evaluation.objects.mongo_find({'verify_tag': {'$exists': True}, '_id': ObjectId(searchid)})
+	sentence = ""
+	for row in all_matched:
+		sentence = row['sentence']
+		auto_tag = row['auto_tag']
+		verify_tag = row['verify_tag']
+	average_sentence = 0
+	acsentence = 0
+	# calculate accuracy for each word
+	for t in range(0, len(auto_tag)):
+		right_tag = sum([1 for a in range(0, len(verify_tag)) if auto_tag[t]['tags'] == verify_tag[a]['tag'][t]['tags']])
+		auto_tag[t]['accuracy'] = right_tag / len(verify_tag)
+		acsentence += auto_tag[t]['accuracy']
+		average_sentence = acsentence / len(auto_tag)
+
+	#calculate accuracy for IOBES
+	average_iobes = 0
+	aciobes = 0
+	for u in range(0, len(auto_tag)):
+		right_tag1 = sum([1 for b in range(0, len(verify_tag)) if auto_tag[u]['tags'][:1] == verify_tag[b]['tag'][u]['tags'][:1]])
+		auto_tag[u]['accuracy_iobes'] = right_tag1 / len(verify_tag)
+		aciobes += auto_tag[u]['accuracy_iobes']
+		average_iobes = aciobes / len(auto_tag)
+
+	#calculate accuracy for POS
+	average_pos = 0
+	acpos = 0
+	for v in range(0, len(auto_tag)):
+		right_tag2 = sum([1 for c in range(0, len(verify_tag)) if auto_tag[v]['tags'][2:] == verify_tag[c]['tag'][v]['tags'][2:]])
+		auto_tag[v]['accuracy_pos'] = right_tag2 / len(verify_tag)
+		acpos += auto_tag[v]['accuracy_pos']
+		average_pos = acpos / len(auto_tag)
+
+
+	response = {
+		'sentence': sentence,
+		'auto_tag': auto_tag,
+		'verify_tag': verify_tag,
+		'accuracy': average_sentence,
+		'accuracy_iobes': average_iobes,
+		'accuracy_pos': average_pos
+	}
+
+	return JsonResponse(response)
+
 	
 def on_search_requested (request, searchkey, status, page):
 	
@@ -120,6 +169,7 @@ def on_search_requested (request, searchkey, status, page):
 	response = {
 		'matched': list(),
 		'max_page': 0,
+		'accuracy': list(),
 	}
 	
 	all_matched = Evaluation.objects.mongo_find(search_criteria)
@@ -135,12 +185,17 @@ def on_search_requested (request, searchkey, status, page):
 			continue
 			
 		reviews = sentence['verify_tag']
-		
+
 		# calculate accuracy for each word
+		calsentence = 0
+		averagetagged = 0
 		for t in range(0, len(auto_tagged)):
 			right_tag = sum([1 for a in range(0, len(reviews)) if auto_tagged[t]['tags'] == reviews[a]['tag'][t]['tags']])
 			auto_tagged[t]['accuracy'] = right_tag / len(reviews)
-			
-		del sentence['verify_tag']
+			calsentence += auto_tagged[t]['accuracy']
+			averagetagged = calsentence / len(auto_tagged)
+
+		response['accuracy'].append(averagetagged)
+		#del sentence['verify_tag']
 		
 	return JsonResponse(response)
