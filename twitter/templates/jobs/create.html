@@ -1,0 +1,109 @@
+{% extends "dashboard/base.html" %}
+{% block title %} {{ title_page }} {% endblock %}
+
+{% load widget_tweaks %}
+
+{% load static %}
+
+{% block footer_asset %}
+    <!-- Data Tables-->
+    <script type="text/javascript" src="{% static "vendors/datatables.net/js/jquery.dataTables.min.js" %}"></script>
+    <!-- iCheck -->
+    <script type="text/javascript" src="{% static "vendors/iCheck/icheck.min.js" %}"></script>
+    <link href="{% static "vendors/iCheck/skins/flat/green.css" %}" rel="stylesheet">
+
+    <!-- Switchery -->
+	<script type="text/javascript" src="{% static "vendors/switchery/dist/switchery.min.js" %}"></script>
+	<link href="{% static "vendors/switchery/dist/switchery.min.css" %}" rel="stylesheet">
+
+    <script type="text/javascript" src="{% static "templates/dashboard/js/confirm.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>
+                    {{ title_page }}
+                </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="col-lg-12 col-md-12">
+                    <form class="form-horizontal" method="POST">
+                    {% csrf_token %}
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label for="inputName" class="col-md-3 control-label col-xs-2">
+                                Project Name
+                            </label>
+                            <div class="col-md-9 col-xs-9">
+                                {{ form.project_name }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName" class="col-md-3 control-label col-xs-2">
+                                Follow
+                            </label>
+                            <div class="col-md-9 col-xs-9">
+                                {{ form.follow }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName" class="col-md-3 control-label col-xs-2">
+                                Track
+                            </label>
+                            <div class="col-md-9 col-xs-9">
+                                {{ form.track }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName" class="col-md-3 control-label col-xs-2">
+                                Language
+                            </label>
+                            <div class="col-md-9 col-xs-9">
+                                {{ form.language }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName" class="col-md-3 control-label col-xs-2">
+                                Location
+                            </label>
+                            <div class="col-md-9 col-xs-9">
+                                {{ form.location }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName" class="col-md-3 control-label col-xs-2">
+                                Worker Account
+                            </label>
+                            <div class="col-md-9 col-xs-9">
+                                {{ form.account }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName" class="col-md-3 control-label col-xs-2">
+                                Category
+                            </label>
+                            <div class="col-md-9 col-xs-9">
+                                {{ form.category }}
+                            </div>
+                        </div>
+                      </div>
+                        <div class="form-actions pal">
+                            <div class="form-group mbn">
+                                <div class="col-md-2 col-xs-2 col-md-offset-10  col-xs-offset-10 right">
+                                    <button type="submit" id="create_jobs_submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+
+{% endblock %}

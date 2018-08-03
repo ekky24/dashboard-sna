@@ -16,15 +16,17 @@
     <link href="{% static 'templates/dashboard/css/fontastic.css' %}" rel='stylesheet' type='text/css'> 
 	
 	<!-- NProgress -->
-	<link href="{% static 'nprogress/nprogress.css' %}" rel='stylesheet' type='text/css'>
+	<link href="{% static 'templates/dashboard/css/nprogress.css' %}" rel='stylesheet' type='text/css'>
+    <link href="{% static 'templates/dashboard/css/bootstrap-progressbar-3.3.4.min.css' %}" rel='stylesheet' type='text/css'>
 	
 	<!-- main -->
-	<link href="{% static 'templates/dashboard/css/main.css' %}" rel='stylesheet' type='text/css'> 
+	<link href="{% static 'templates/dashboard/css/main.css' %}" rel='stylesheet' type='text/css'>
 
 	{% block header_asset %}{% endblock %}   
 
 	<link href="{% static 'templates/dashboard/css/custom.min.css' %}" rel='stylesheet' type='text/css'>
 	<link href="{% static 'templates/dashboard/css/qilara.css' %}" rel='stylesheet' type='text/css'>
+    <link href="{% static 'templates/dashboard/css/jquery-ui.min.css' %}" rel='stylesheet' type='text/css'>
 </head>
 
   <body class="nav-md">
@@ -69,7 +71,7 @@
        {% include "dashboard/partial/top_nav.html" %}
 		
         <!-- page content -->
-        <div class="right_col" role="main">
+        <div class="right_col" role="main" style="height: auto;">
 		
             {% if messages %}
 	        	{% for message in messages %}
@@ -100,6 +102,11 @@
 <script type="text/javascript" src="{% static 'templates/dashboard/js/qilara.js' %}"></script>
 <script type="text/javascript" src="{% static 'chart.js/dist/Chart.js' %}"></script>
 <script type="text/javascript" src="{% static 'templates/dashboard/js/gauge.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/dashboard/js/jquery.tagsinput.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/dashboard/js/jquery-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/dashboard/js/sweetalert2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/dashboard/js/nprogress.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/dashboard/js/bootstrap-progressbar.min.js' %}"></script>
 </body>
 
 </html>

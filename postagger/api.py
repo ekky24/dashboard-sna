@@ -77,56 +77,6 @@ def on_submit (request):
 	return HttpResponse(status=response_code)	
 	
 def on_overview_requested (request):
-	'''
-	sentences_evaluated = Evaluation.objects.mongo_find({'verify_tag': {'$exists': True},
-				'model_name': str(env('MODEL_NAME')), 'model_version': str(env('MODEL_VERSION'))})
-	response = {
-		"evaluated_total": sentences_evaluated.count(),
-		"accuracy_pos": 0,
-		"accuracy_iobes": 0,
-		"accuracy_total": 0
-	}
-
-	total_evaluation = 0
-	true_overall = 0
-	true_iobes = 0
-	true_pos = 0
-
-	for row in sentences_evaluated:
-		for verify in row['verify_tag']:
-			for tag_index in range(len(verify['tag'])):
-				auto_tag = row['auto_tag'][tag_index]
-				verify_tag = verify['tag'][tag_index]
-
-				try:
-					iobes_auto = auto_tag['tags'][:1]
-					iobes_verify = verify_tag['tags'][:1]
-					pos_auto = auto_tag['tags'][2:]
-					pos_verify = verify_tag['tags'][2:]
-				except(KeyError):
-					print("KeyError")
-				else:
-					""" Overall Calculation """
-					if (auto_tag['tags'] == verify_tag['tags']):
-						true_overall += 1
-
-					""" IOBES Calculation """
-					if (iobes_auto == iobes_verify):
-						true_iobes += 1
-
-					""" POS Calculation """
-					if (pos_auto == pos_verify):
-						true_pos += 1
-
-					total_evaluation += 1
-
-	# calculate accuracy
-	response['accuracy_pos'] = (true_overall / total_evaluation)
-	response['accuracy_iobes'] = (true_iobes / total_evaluation)
-	response['accuracy_total'] = (true_overall / total_evaluation)
-	print(type((true_overall / total_evaluation)))
-	'''
-
 	try:
 		conn = redis.StrictRedis(
 			host='127.0.0.1',

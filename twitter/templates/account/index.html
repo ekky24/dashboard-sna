@@ -1,0 +1,76 @@
+{% extends "dashboard/base.html" %}
+{% block title %} {{ title_page }} {% endblock %}
+
+{% load static %}
+
+{% block footer_asset %}
+    <!-- Data Tables-->
+    <script type="text/javascript" src="{% static "vendors/datatables.net/js/jquery.dataTables.min.js" %}"></script>
+    <!-- iCheck -->
+    <script type="text/javascript" src="{% static "vendors/iCheck/icheck.min.js" %}"></script>
+    <link href="{% static "vendors/iCheck/skins/flat/green.css" %}" rel="stylesheet">
+    <script type="text/javascript" src="{% static "templates/dashboard/js/confirm.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>{{ title_page }}</h3>
+      </div>
+
+      <div class="title_right">
+        <div class="col-md-3 col-sm-3 col-xs-12 form-group pull-right top_search">
+          <div class="input-group">
+            <div class="form-group" style="float: right;">
+                <a href="/twitter/account/create" class="btn btn-success">
+                    <i class="fa fa-plus-circle"></i> Add Account
+                </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_content">
+                    <div class="table-responsive">
+                        <table class="table table-striped jambo_table bulk_action" id="table_wdelete">
+                            <thead>
+                            <tr class="headings">
+                                <th width="10%">
+                                  <input type="checkbox" id="check-all" class="flat">
+                                </th>
+                                <th class="column-title" width="35%">Worker Account</th>
+                                <th class="column-title" width="50%">Jobs</th>
+                                <th class="column-title no-link last" width="50px"></th>
+                                <th class="bulk-actions">
+                                  <a class="antoo" style="color:#fff; font-weight:500;">( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>                            
+                            {% for account in accounts %}
+                                <tr>
+                                    <td class="a-center ">
+                                      <input type="checkbox" class="flat" name="table_records">
+                                    </td>
+                                    <td><a href="/twitter/account/{{ account.id }}/edit" class="label label-info">
+                                            {{ account.email }}
+                                        </a></td>
+                                    <td></td>
+                                    <td class="center">
+                                        <a href="/twitter/account/{{ account.id }}/delete" data-method="delete" data-token="{% csrf_token %}" data-confirm="Are You Sure" class="delete-data"><span class="fa fa-trash-o"></span></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

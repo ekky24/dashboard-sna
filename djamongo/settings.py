@@ -21,6 +21,9 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
+CELERY_BROKER_URL = 'amqp://localhost'
+#CELERY_BROKER_URL = 'amqp://guest:guest@localhost:15672//'
+
 
 # Application definition
 
@@ -35,7 +38,8 @@ INSTALLED_APPS = [
 	'users',
 	'widget_tweaks',
 	'postagger',
-	'review'
+	'review',
+	'twitter'
 ]
 
 MIDDLEWARE = [
@@ -110,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Jakarta'
 
 USE_I18N = True
 
