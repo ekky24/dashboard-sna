@@ -14,11 +14,12 @@ class StreamListener(StreamListener):
         db = client.event_detection        
         self.col = db[table]
 
-        self.url = "http://api.informatika.lipi.go.id/7ac49b48-3002-4795-b376-bc06709b3721/sentiment"
+        """self.url = "http://api.informatika.lipi.go.id/7ac49b48-3002-4795-b376-bc06709b3721/sentiment"
         if(category == 'telco'):
             self.url += '/telco'
         elif(category == 'fnb'):
             self.url += '/fnb'
+        """
 
     def on_data(self, data):
         try:            
@@ -30,7 +31,7 @@ class StreamListener(StreamListener):
         # print(tweet)
         if "text" in tweet:
             try:
-                r = requests.post(self.url, data = {'content-type': 'application/json', 'sentence': tweet['text'], 'id': tweet['id']})
+                """r = requests.post(self.url, data = {'content-type': 'application/json', 'sentence': tweet['text'], 'id': tweet['id']})
                 sentiment = r.json()['sentiment']
 
                 if(sentiment == 'positive' or sentiment == 'positif'):
@@ -40,7 +41,7 @@ class StreamListener(StreamListener):
                 elif(sentiment == 'negative' or sentiment == 'negatif'):
                     sentiment = 'negative'
 
-                tweet['sentiment'] = sentiment
+                tweet['sentiment'] = sentiment"""
                 tweet['timestamp_ms'] = bson.Int64(tweet['timestamp_ms'])
                 
                 self.col.insert_one(tweet)                

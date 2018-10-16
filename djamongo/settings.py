@@ -21,9 +21,13 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
-CELERY_BROKER_URL = 'amqp://localhost'
-#CELERY_BROKER_URL = 'amqp://guest:guest@localhost:15672//'
-
+# CELERY STUFF
+BROKER_URL = 'amqp://guest@localhost//'
+CELERY_RESULT_BACKEND = 'amqp://guest@localhost//'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Jakarta'
 
 # Application definition
 

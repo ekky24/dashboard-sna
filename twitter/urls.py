@@ -14,4 +14,7 @@ urlpatterns = [
 	url(r'^jobs/(?P<jobs_id>\d+)/delete$', views.delete_jobs, name='delete_jobs'),
 	url(r'^refresh_data/(?P<table>.*)/(?P<limit>[0-9]+)/$', api.refresh_data),
 	url(r'^refresh_data/(?P<table>.*)/$', api.refresh_data),
+	url(r'^monitor/$', views.index_monitor, name='index_monitor'),
+	url(r'^refresh_task/$', api.refresh_task),
+	url(r'^stop_task/(?P<task_id>.*)/$', api.stop_task),
 ]

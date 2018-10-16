@@ -98,7 +98,6 @@ def on_overview_requested (request):
 	}
 
 	return JsonResponse(response)
-	'''
 
 def on_search_id(request, searchid):
 	print(searchid)

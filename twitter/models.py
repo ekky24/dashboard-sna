@@ -25,4 +25,6 @@ class WorkerJobs(models.Model):
     collection_name = models.CharField(max_length=100, blank=True)
     gen_command = models.CharField(max_length=400, blank=True)
     category = models.CharField(max_length=20)
+    task_id = models.CharField(max_length=50, blank=True)
+    task_status = models.CharField(max_length=10, blank=True)
     created_at = models.DateTimeField(default=timezone.now)

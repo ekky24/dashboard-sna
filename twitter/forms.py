@@ -23,4 +23,4 @@ class WorkerJobsForm(forms.ModelForm):
 
 	class Meta:
 		model = WorkerJobs
-		fields = ['project_name', 'language', 'follow', 'track', 'location', 'account', 'collection_name', 'gen_command', 'category']
+		fields = ['project_name', 'language', 'follow', 'track', 'location', 'account', 'collection_name', 'gen_command', 'category', 'task_id', 'task_status']

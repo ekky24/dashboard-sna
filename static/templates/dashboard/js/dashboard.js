@@ -614,15 +614,19 @@ function refreshPage(table, limit) {
 		for (var i=0; i<json['get_sentiment'].length; i++) {
 			var tweet = json['get_sentiment'][i]
 			status = '<span class="label label-success">Neutral</span>'
-	    	if (tweet['sentiment'] == 'positive') {
+	    	/*if (tweet['sentiment'] == 'positive') {
 	        	status = '<span class="label label-primary">Positive</span>';
 	        } 
 	        else if (tweet['sentiment'] == 'negative') {
 	 			status = '<span class="label label-danger">Negative</span>';
-			}
+			}*/
 	                
 	        row_tweet = "<tr id=" + tweet['id'] + "><td>" + tweet['text'] + "</td><td class='text-center'>" + status  +"</td></tr>";
 	        data_len = $('table tr').length;
+
+	        if ($('#no_data').length) {
+				$('#no_data').remove().fadeOut(1000)
+			}
 
 			if ($('#' + tweet['id']).length == 0) {
 				if (data_len > 10) {
@@ -660,7 +664,41 @@ function refreshPage(table, limit) {
 		$('#progress_positive').css('width', percentage_positif + "%")
 		$('#progress_neutral').css('width', percentage_neutral + "%")
 		$('#progress_negative').css('width', percentage_negative + "%")
-	});    
+	});
+}
+
+function refreshTask() {
+	$.get('/twitter/refresh_task', function (json, status) {
+		for (var i=0; i<json['result'].length; i++) {
+			var data = json['result'][i]
+			if (data['status'] == "PENDING") {
+				$('#' + data['id']).text("PENDING")
+				$('#' + data['id']).attr("class", "label label-default")
+				$("#" + data['id'] + "_action_task").text("Start")
+			}
+			else if (data['status'] == "STARTED") {
+				$('#' + data['id']).text("STARTED")
+				$('#' + data['id']).attr("class", "label label-primary")
+				$("#" + data['id'] + "_action_task").text("Stop")
+			}
+			else if (data['status'] == "RETRY") {
+				$('#' + data['id']).text("RETRY")
+				$('#' + data['id']).attr("class", "label label-warning")
+				$("#" + data['id'] + "_action_task").text("Start")
+			}
+			else if (data['status'] == "FAILED") {
+				$('#' + data['id']).text("FAILED")
+				$('#' + data['id']).attr("class", "label label-danger")
+				$("#" + data['id'] + "_action_task").text("Start")
+			}
+			else if (data['status'] == "SUCCESS") {
+				$('#' + data['id']).text("SUCCESS")
+				$('#' + data['id']).attr("class", "label label-success")
+				$("#" + data['id'] + "_action_task").text("Done")
+				$("#" + data['id'] + "_action_task").attr("disabled", "true")
+			}
+		}
+	});
 }
 
 function initTwitterPage() {
@@ -672,6 +710,27 @@ function initTwitterPage() {
 			refreshPage(table, 2)
 		}, 3000);
 	}
+
+	if (window.location.href.indexOf("twitter/monitor")) {
+		setInterval(function() {
+			refreshTask()
+		}, 5000);
+	}
+
+	$(".action_task").click(function() {
+		if ($(this).text() == "Stop") {
+			$(this).text("Start")
+			var task_id = $(this).attr("id")
+			task_id = task_id.substring(0, 36)
+
+			$.get('/twitter/stop_task/' + task_id, function (json, status) {
+				refreshTask()
+			});
+		}
+		else {
+			$(this).text("Stop")
+		}
+	})
 
 	$('.delete-data').click(function(e) {
 		e.preventDefault()

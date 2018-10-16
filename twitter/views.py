@@ -5,10 +5,11 @@ from .forms import WorkerAccountForm, WorkerJobsForm
 from django.contrib import messages
 import time
 import hashlib
-from .tasks import crawl_data
+from djamongo.tasks import crawl_data
 from django.utils.timezone import localtime
 from pymongo import MongoClient
 import pymongo
+from celery.result import AsyncResult
 
 language_code = {
 	'af': 'Afrikaans',
@@ -208,6 +209,15 @@ def index_jobs(request):
 
 @login_required()
 @user_passes_test(lambda u: u.is_superuser)
+def index_monitor(request):
+	monitor = WorkerJobs.objects.all().order_by('-created_at')
+	context = {'title_page' : 'Twitter Monitoring', 
+				'monitor' : monitor}
+
+	return render(request, 'monitor/index.html', context = context)
+
+@login_required()
+@user_passes_test(lambda u: u.is_superuser)
 def create_account(request):
 	if request.method == 'POST':
 		account_form = WorkerAccountForm(request.POST)
@@ -305,6 +315,10 @@ def generate_data(data, collection_name=None):
 	category = data['category']
 
 	params = [tweet_method, keywords, lan_code, locations, user_id, table, consumer_key, consumer_secret, access_token, access_token_secret, category]
+	crawl_task = crawl_data.delay(params)
+	data['task_id'] = crawl_task.id
+	data['task_status'] = crawl_task.status
+
 	return data, params
 
 @login_required()
@@ -326,10 +340,9 @@ def create_jobs(request):
 			data['language'] = language_iso[0:len(language_iso)-1]
 			
 			request.POST, params = generate_data(data)
-
+			
 			WorkerJobsForm(request.POST).save()
 
-			crawl_data.delay(params)
 			messages.success(request, 'Jobs has been registered')
 			return redirect('index_jobs')
 		else:
@@ -364,7 +377,6 @@ def edit_jobs(request, jobs_id):
 
 			WorkerJobsForm(request.POST, instance=jobs).save()
 			
-			crawl_data.delay(params)
 			messages.success(request, 'Jobs has been update')
 			return redirect('index_jobs')
 		else:
@@ -396,21 +408,23 @@ def edit_jobs(request, jobs_id):
 		for count, row in enumerate(raw_data):
 			if(count < 10):
 				tweet_data.append(row)
-			if(row['sentiment'] == 'positive'):
+			'''if(row['sentiment'] == 'positive'):
 				count_positive += 1
 			elif(row['sentiment'] == 'neutral'):
 				count_neutral += 1
 			elif(row['sentiment'] == 'negative'):
-				count_negative += 1
+				count_negative += 1'''
 
-		if(raw_data_count > 0):
+		'''if(raw_data_count > 0):
 			total = count_positive + count_negative + count_neutral
 			persen_positive = count_positive / total * 100
 			persen_neutral = count_neutral / total * 100
-			persen_negative = count_negative / total * 100
+			persen_negative = count_negative / total * 100'''
 
+	'''context = {'title_page' : 'Edit Jobs', 'form': jobs_form, 'tweet_data': tweet_data, 'collection_name': jobs.collection_name, 
+		'sentiment': [count_positive, count_neutral, count_negative, persen_positive, persen_neutral, persen_negative]}'''
 	context = {'title_page' : 'Edit Jobs', 'form': jobs_form, 'tweet_data': tweet_data, 'collection_name': jobs.collection_name, 
-		'sentiment': [count_positive, count_neutral, count_negative, persen_positive, persen_neutral, persen_negative]}
+		'sentiment': [0, 0, 0, 0, 0, 0]}
 
 	return render(request, 'jobs/edit.html', context=context)
 

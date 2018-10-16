@@ -9,3 +9,8 @@ from postagger.models import Evaluation
 def index(request):
 	context = {'title_page' : 'Dashboard'}
 	return render(request, 'index.html', context = context)
+
+@login_required()
+@user_passes_test(lambda u: u.is_superuser)
+def detail(request):
+	return True
