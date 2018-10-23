@@ -139,14 +139,14 @@
                                 {% for tweet in tweet_data %}
                                     <tr id="{{ tweet.id }}">
                                         <td>{{ tweet.text }}</td>
-                                        <!--{% if tweet.sentiment == "positive" %}
+                                        {% if tweet.sentiment == "positive" %}
                                             <td class="text-center"><span class="label label-primary">Positive</span></td>
                                         {% elif tweet.sentiment == "neutral" %}
                                             <td class="text-center"><span class="label label-success">Neutral</span></td>
                                         {% elif tweet.sentiment == "negative" %}
                                             <td class="text-center"><span class="label label-danger">Negative</span></td>
-                                        {% endif %}-->
-                                        <td class="text-center"><span class="label label-success">Neutral</span></td>
+                                        {% endif %}
+                                        <!--<td class="text-center"><span class="label label-success">Neutral</span></td>-->
                                     </tr>
                                 {% endfor %}
                             {% else %}

@@ -614,12 +614,12 @@ function refreshPage(table, limit) {
 		for (var i=0; i<json['get_sentiment'].length; i++) {
 			var tweet = json['get_sentiment'][i]
 			status = '<span class="label label-success">Neutral</span>'
-	    	/*if (tweet['sentiment'] == 'positive') {
+	    	if (tweet['sentiment'] == 'positive') {
 	        	status = '<span class="label label-primary">Positive</span>';
 	        } 
 	        else if (tweet['sentiment'] == 'negative') {
 	 			status = '<span class="label label-danger">Negative</span>';
-			}*/
+			}
 	                
 	        row_tweet = "<tr id=" + tweet['id'] + "><td>" + tweet['text'] + "</td><td class='text-center'>" + status  +"</td></tr>";
 	        data_len = $('table tr').length;

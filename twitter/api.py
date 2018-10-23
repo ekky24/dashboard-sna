@@ -22,7 +22,7 @@ def refresh_data(request, table, limit=10):
 		temp = {}
 		temp['id'] = str(row['id'])
 		temp['text'] = row['text']
-		#temp['sentiment'] = row['sentiment']
+		temp['sentiment'] = row['sentiment']
 		tweet_sentiment.append(temp)
 
 	for row in calculate:
@@ -33,8 +33,8 @@ def refresh_data(request, table, limit=10):
 
 	response = {
 		'get_sentiment': tweet_sentiment,
-		#'calculate_sentiment': calculate_sentiment,
-		'calculate_sentiment': 0,
+		'calculate_sentiment': calculate_sentiment,
+		#'calculate_sentiment': 0,
 	}
 
 	return JsonResponse(response)

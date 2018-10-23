@@ -408,23 +408,23 @@ def edit_jobs(request, jobs_id):
 		for count, row in enumerate(raw_data):
 			if(count < 10):
 				tweet_data.append(row)
-			'''if(row['sentiment'] == 'positive'):
+			if(row['sentiment'] == 'positive'):
 				count_positive += 1
 			elif(row['sentiment'] == 'neutral'):
 				count_neutral += 1
 			elif(row['sentiment'] == 'negative'):
-				count_negative += 1'''
+				count_negative += 1
 
-		'''if(raw_data_count > 0):
+		if(raw_data_count > 0):
 			total = count_positive + count_negative + count_neutral
 			persen_positive = count_positive / total * 100
 			persen_neutral = count_neutral / total * 100
-			persen_negative = count_negative / total * 100'''
+			persen_negative = count_negative / total * 100
 
-	'''context = {'title_page' : 'Edit Jobs', 'form': jobs_form, 'tweet_data': tweet_data, 'collection_name': jobs.collection_name, 
-		'sentiment': [count_positive, count_neutral, count_negative, persen_positive, persen_neutral, persen_negative]}'''
 	context = {'title_page' : 'Edit Jobs', 'form': jobs_form, 'tweet_data': tweet_data, 'collection_name': jobs.collection_name, 
-		'sentiment': [0, 0, 0, 0, 0, 0]}
+		'sentiment': [count_positive, count_neutral, count_negative, persen_positive, persen_neutral, persen_negative]}
+	'''context = {'title_page' : 'Edit Jobs', 'form': jobs_form, 'tweet_data': tweet_data, 'collection_name': jobs.collection_name, 
+		'sentiment': [0, 0, 0, 0, 0, 0]}'''
 
 	return render(request, 'jobs/edit.html', context=context)
 
