@@ -12,5 +12,6 @@ def index(request):
 
 @login_required()
 @user_passes_test(lambda u: u.is_superuser)
-def detail(request):
-	return True
+def detail(request, doc_id):
+	context = {'title_page' : 'Detail', 'doc_id': doc_id}
+	return render(request, 'dashboard/detail.html', context = context)
