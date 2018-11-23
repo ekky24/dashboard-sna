@@ -5,6 +5,11 @@ from pymongo import MongoClient
 import json
 import requests
 import bson
+from nltk.corpus import stopwords
+import pandas as pd
+import string
+import re
+from sentiment.models import CleanData
 
 class StreamListener(StreamListener):
     counter = 0
@@ -43,13 +48,33 @@ class StreamListener(StreamListener):
                 tweet['sentiment'] = sentiment
                 tweet['timestamp_ms'] = bson.Int64(tweet['timestamp_ms'])
                 
-                self.col.insert_one(tweet)                
+                self.col.insert_one(tweet) 
+
+                #proses clean data
+                wordClean = []
+                dSentiment = []
+                datasentence = tweet['text']
+                tokens = self.clean_doc(datasentence)
+                teks_sentence = " ".join(tokens)
+                wordClean.append(teks_sentence)
+                dSen = tweet['sentiment']
+                dSentiment.append(dSen)
+
+                dataUp = {'sentence':wordClean, 'sentiment':dSentiment}
+                dataFrame = pd.DataFrame(data=dataUp)
+                dataFrame.drop_duplicates(subset=['sentence'], keep='first')
+                data = CleanData(sentence = dataFrame.sentence, sentiment = dataFrame.sentiment)
+                data.save() 
+                    
+
             except pymongo.errors.DuplicateKeyError:
                 pass
             except Exception as ex:
                 template = "An exception of type {0} occurred. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
                 print(message)
+
+
 
     def on_connect(self):
         self.counter = 0
@@ -60,3 +85,16 @@ class StreamListener(StreamListener):
 
     def on_timeout(self):
         print("Timeout Occured")
+
+    #function clean_doc
+    def clean_doc(self, data):
+        tokens = data.split()
+        re_punc = re.compile('[%s]' % re.escape(string.punctuation))
+        tokens = [re_punc.sub('', w) for w in tokens]
+        tokens = [word for word in tokens if word.isalpha()]
+        stop_words = set(stopwords.words('indonesian'))
+        tokens = [w for w in tokens if not w in stop_words]
+        tokens = [word for word in tokens if len(word) > 1]
+        return tokens 
+
+

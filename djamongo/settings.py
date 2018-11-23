@@ -43,7 +43,8 @@ INSTALLED_APPS = [
 	'widget_tweaks',
 	'postagger',
 	'review',
-	'twitter'
+	'twitter',
+	'sentiment'
 ]
 
 MIDDLEWARE = [

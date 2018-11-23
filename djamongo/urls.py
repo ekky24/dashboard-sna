@@ -6,7 +6,8 @@ urlpatterns = [
 	url(r'^dashboard/', include('dashboard.urls')),
 	url(r'^postagger/', include('postagger.urls')),
 	url(r'^review/', include('review.urls')),
-	url(r'^twitter/', include('twitter.urls'))
+	url(r'^twitter/', include('twitter.urls')),
+	url(r'^sentiment/', include('sentiment.urls')),
 ]
 
 if settings.DEBUG:
